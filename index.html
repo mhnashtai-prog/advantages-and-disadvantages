@@ -452,42 +452,6 @@
       display: block;
     }
 
-    .practice-type-selector {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .practice-type-btn {
-      padding: 0.75rem 1.5rem;
-      background: rgba(28, 28, 30, 0.85);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(74, 144, 226, 0.25);
-      border-radius: 0.75rem;
-      color: #8e8e93;
-      font-weight: 600;
-      font-size: 0.875rem;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-    }
-
-    .practice-type-btn:hover {
-      background: rgba(28, 28, 30, 0.95);
-      color: #4a90e2;
-      border-color: rgba(74, 144, 226, 0.4);
-      transform: translateY(-2px);
-    }
-
-    .practice-type-btn.active {
-      background: rgba(74, 144, 226, 0.15);
-      color: #4a90e2;
-      border-color: rgba(74, 144, 226, 0.5);
-      box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
-    }
-
     .practice-card {
       background: rgba(28, 28, 30, 0.98);
       backdrop-filter: blur(40px) saturate(150%);
@@ -832,15 +796,8 @@
 
     <!-- PRACTICE MODE -->
     <div id="practiceMode" class="practice-container">
-      <div class="practice-type-selector">
-        <button class="practice-type-btn active" onclick="changePracticeType('fillblank')" id="btnFillBlank">Fill in the Blanks</button>
-        <button class="practice-type-btn" onclick="changePracticeType('reorder')" id="btnReorder">Reorder Words</button>
-        <button class="practice-type-btn" onclick="changePracticeType('multiple')" id="btnMultiple">Multiple Choice</button>
-        <button class="practice-type-btn" onclick="changePracticeType('matching')" id="btnMatching">Match Expressions</button>
-      </div>
-
       <div class="practice-score" id="practiceScore">
-        Score: 0/0 | Accuracy: 0%
+        Question: 0/0 | Question: 0/0 | Score: 0/0 | Accuracy: 0%
       </div>
 
       <div class="practice-card" id="practiceCard">
@@ -1089,15 +1046,7 @@
     let viewedCards = new Set();
     let isFlipped = false;
 
-    // PRACTICE MODE VARIABLES
-    let practiceMode = false;
-    let practiceType = 'fillblank';
-    let practiceData = [];
-    let currentPracticeIndex = 0;
-    let practiceScore = { correct: 0, total: 0 };
-    let userAnswer = [];
-
-    // LEARNING MODE FUNCTIONS
+        // LEARNING MODE FUNCTIONS
     function changeLevel(level) {
       if (practiceMode) return;
       
@@ -1130,7 +1079,6 @@
       
       document.getElementById('sentenceText').innerHTML = cardData.sentence;
       
-      // Create breakdown content (keeping original structure)
       let breakdownHTML = '<div class="card-main-text">' + cardData.sentence + '</div>';
       breakdownHTML += '<div class="breakdown-box">';
       breakdownHTML += '<div class="breakdown-item">';
@@ -1237,6 +1185,14 @@
       updateProgress();
     }
 
+
+    // PRACTICE MODE VARIABLES
+    let practiceMode = false;
+    let practiceData = [];
+    let currentPracticeIndex = 0;
+    let practiceScore = { correct: 0, total: 0, answered: 0 };
+    let userAnswers = [];
+
     // PRACTICE MODE FUNCTIONS
     function togglePracticeMode() {
       practiceMode = !practiceMode;
@@ -1264,17 +1220,7 @@
       }
     }
 
-    function changePracticeType(type) {
-      practiceType = type;
-      
-      document.querySelectorAll('.practice-type-btn').forEach(btn => btn.classList.remove('active'));
-      document.getElementById('btn' + type.charAt(0).toUpperCase() + type.slice(1)).classList.add('active');
-      
-      initPractice();
-    }
-
     function initPractice() {
-      // Gather all expressions from all categories
       practiceData = [];
       Object.keys(data).forEach(category => {
         data[category].forEach(item => {
@@ -1285,492 +1231,191 @@
         });
       });
       
-      // Shuffle and take 10 items
       practiceData = shuffleArray(practiceData).slice(0, 10);
       currentPracticeIndex = 0;
-      practiceScore = { correct: 0, total: 0 };
+      practiceScore = { correct: 0, total: 0, answered: 0 };
+      userAnswers = new Array(practiceData.length).fill(null);
       
       updatePracticeScore();
-      showPracticeQuestion();
+      showAllQuestions();
     }
 
-    function showPracticeQuestion() {
-      if (currentPracticeIndex >= practiceData.length) {
-        showPracticeComplete();
+    function showAllQuestions() {
+      const card = document.getElementById('practiceCard');
+      
+      let html = `
+        <div class="card-label">MULTIPLE CHOICE PRACTICE</div>
+        <div style="color: #8e8e93; margin-bottom: 2rem; text-align: center; font-size: 1rem;">
+          Select the correct expression for each sentence. You can answer in any order.<br>
+          <strong>Complete all questions, then click Submit to check your answers.</strong>
+        </div>
+      `;
+      
+      practiceData.forEach((item, index) => {
+        const correctAnswer = item.expression;
+        const allExpressions = practiceData
+          .filter(i => i.expression !== correctAnswer)
+          .map(i => i.expression);
+        
+        const wrongAnswers = shuffleArray(allExpressions).slice(0, 3);
+        const options = shuffleArray([correctAnswer, ...wrongAnswers]);
+        
+        const blankContext = item.context.replace('___', '<span style="color: #4a90e2; font-weight: 700;">[ ? ]</span>');
+        
+        html += `
+          <div class="question-block" id="question-${index}" style="margin-bottom: 3rem; padding: 2rem; background: rgba(28, 28, 30, 0.6); border-radius: 1rem; border: 1px solid rgba(74, 144, 226, 0.2);">
+            <div style="color: #C9A961; font-weight: 700; font-size: 0.9rem; margin-bottom: 1rem;">
+              QUESTION ${index + 1}
+            </div>
+            <div class="practice-question" style="margin-bottom: 1.5rem;">
+              ${blankContext}
+            </div>
+            <div class="practice-options" id="options-${index}">
+        `;
+        
+        options.forEach((option, optIndex) => {
+          html += `
+            <div class="practice-option" id="option-${index}-${optIndex}" onclick="selectAnswer(${index}, '${option.replace(/'/g, "\\'")}', this)">
+              ${option}
+            </div>
+          `;
+        });
+        
+        html += `
+            </div>
+            <div class="feedback" id="feedback-${index}" style="margin-top: 1rem;"></div>
+          </div>
+        `;
+      });
+      
+      html += `
+        <div style="text-align: center; margin-top: 2rem;">
+          <button class="check-btn" onclick="submitAllAnswers()" id="submitBtn" style="font-size: 1.1rem; padding: 1.25rem 3rem;">
+            ✓ Submit and Check Answers
+          </button>
+        </div>
+      `;
+      
+      card.innerHTML = html;
+    }
+
+    function selectAnswer(questionIndex, selectedAnswer, element) {
+      if (practiceScore.answered > 0) return;
+      
+      const allOptions = document.querySelectorAll(`#options-${questionIndex} .practice-option`);
+      allOptions.forEach(opt => {
+        opt.style.background = 'rgba(28, 28, 30, 0.9)';
+        opt.style.borderColor = 'rgba(74, 144, 226, 0.2)';
+        opt.style.color = '#e5e5e7';
+      });
+      
+      element.style.background = 'rgba(74, 144, 226, 0.25)';
+      element.style.borderColor = 'rgba(74, 144, 226, 0.6)';
+      element.style.color = '#4a90e2';
+      
+      userAnswers[questionIndex] = selectedAnswer;
+      updatePracticeScore();
+      
+      const allAnswered = userAnswers.every(answer => answer !== null);
+      const submitBtn = document.getElementById('submitBtn');
+      if (allAnswered) {
+        submitBtn.style.opacity = '1';
+        submitBtn.style.transform = 'scale(1.05)';
+      }
+    }
+
+    function submitAllAnswers() {
+      const unanswered = userAnswers.filter(answer => answer === null).length;
+      if (unanswered > 0) {
+        alert(`Please answer all questions! ${unanswered} question(s) remaining.`);
         return;
       }
       
-      const item = practiceData[currentPracticeIndex];
-      const card = document.getElementById('practiceCard');
+      practiceScore.answered = practiceData.length;
+      practiceScore.total = practiceData.length;
+      practiceScore.correct = 0;
       
-      switch (practiceType) {
-        case 'fillblank':
-          showFillBlankQuestion(item, card);
-          break;
-        case 'reorder':
-          showReorderQuestion(item, card);
-          break;
-        case 'multiple':
-          showMultipleChoiceQuestion(item, card);
-          break;
-        case 'matching':
-          showMatchingQuestion(item, card);
-          break;
-      }
-    }
-
-    function showFillBlankQuestion(item, card) {
-      const blankContext = item.context.replace('___', '<span class="blank" id="userBlank"></span>');
-      
-      // Get one word hint from the expression
-      const words = item.expression.toLowerCase().split(' ').filter(w => w.length > 2);
-      const hintWord = words[Math.floor(Math.random() * words.length)] || item.expression.split(' ')[0];
-      
-      card.innerHTML = `
-        <div class="card-label">FILL IN THE BLANK</div>
-        <div class="practice-question">${blankContext}</div>
-        <input type="text" class="practice-input" id="practiceInput" placeholder="Type the missing expression..." />
-        <div style="display: flex; gap: 1rem;">
-          <button class="check-btn" onclick="checkFillBlank()">✓ Check Answer</button>
-          <button class="show-answer-btn" onclick="showAnswer()">💡 Show Answer</button>
-        </div>
-        <div class="feedback" id="feedback"></div>
-        <div style="margin-top: 1rem; color: #8e8e93; font-size: 0.9rem;">
-          💡 Hint: One word from the expression is "<strong style="color: #C9A961;">${hintWord}</strong>"
-        </div>
-      `;
-      
-      document.getElementById('practiceInput').focus();
-      document.getElementById('practiceInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') checkFillBlank();
-      });
-    }
-
-    function checkFillBlank() {
-      const userInput = document.getElementById('practiceInput').value.trim().toLowerCase();
-      const correctAnswer = practiceData[currentPracticeIndex].expression.toLowerCase();
-      const feedback = document.getElementById('feedback');
-      
-      practiceScore.total++;
-      
-      if (userInput === correctAnswer || correctAnswer.includes(userInput) && userInput.length > 3) {
-        practiceScore.correct++;
-        feedback.className = 'feedback correct';
-        feedback.innerHTML = `
-          ✓ Correct! The answer is: <strong>${practiceData[currentPracticeIndex].expression}</strong>
-          <div style="margin-top: 1rem;">
-            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
-          </div>
-        `;
-      } else {
-        feedback.className = 'feedback incorrect';
-        feedback.innerHTML = `
-          ✗ Not quite. The correct answer is: <strong>${practiceData[currentPracticeIndex].expression}</strong>
-          <div style="margin-top: 1rem;">
-            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
-          </div>
-        `;
-      }
-      
-      document.getElementById('practiceInput').disabled = true;
-      document.querySelector('.check-btn').disabled = true;
-      updatePracticeScore();
-    }
-
-    function showReorderQuestion(item, card) {
-      const words = item.sentence
-        .replace(/<[^>]*>/g, '') // Remove HTML tags
-        .split(' ')
-        .filter(w => w.length > 0);
-      
-      const shuffledWords = shuffleArray([...words]);
-      userAnswer = [];
-      
-      card.innerHTML = `
-        <div class="card-label">REORDER THE WORDS</div>
-        <div class="practice-question">Arrange the words to form the correct sentence:</div>
-        <div class="sentence-builder" id="sentenceBuilder">
-          <span style="color: #636366;">Click words below to build the sentence...</span>
-        </div>
-        <div class="word-bank" id="wordBank"></div>
-        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-          <button class="check-btn" onclick="checkReorder()" id="checkReorderBtn" disabled>✓ Check Answer</button>
-          <button class="show-answer-btn" onclick="showAnswer()">💡 Show Answer</button>
-          <button class="reset-btn" onclick="clearSentence()" style="padding: 1rem 2rem;">🔄 Clear</button>
-        </div>
-        <div class="feedback" id="feedback"></div>
-      `;
-      
-      const wordBank = document.getElementById('wordBank');
-      shuffledWords.forEach((word, index) => {
-        const chip = document.createElement('div');
-        chip.className = 'word-chip';
-        chip.textContent = word;
-        chip.onclick = () => addWordToSentence(word, index);
-        chip.dataset.index = index;
-        wordBank.appendChild(chip);
-      });
-    }
-
-    function addWordToSentence(word, index) {
-      userAnswer.push({ word, index });
-      
-      const builder = document.getElementById('sentenceBuilder');
-      if (userAnswer.length === 1) {
-        builder.innerHTML = '';
-        builder.classList.add('has-words');
-      }
-      
-      const chip = document.createElement('div');
-      chip.className = 'word-chip selected';
-      chip.textContent = word;
-      chip.onclick = () => removeWordFromSentence(userAnswer.length - 1);
-      builder.appendChild(chip);
-      
-      document.querySelector(`[data-index="${index}"]`).classList.add('used');
-      document.getElementById('checkReorderBtn').disabled = false;
-    }
-
-    function removeWordFromSentence(position) {
-      const removed = userAnswer.splice(position, 1)[0];
-      document.querySelector(`[data-index="${removed.index}"]`).classList.remove('used');
-      
-      const builder = document.getElementById('sentenceBuilder');
-      builder.innerHTML = '';
-      
-      if (userAnswer.length === 0) {
-        builder.innerHTML = '<span style="color: #636366;">Click words below to build the sentence...</span>';
-        builder.classList.remove('has-words');
-        document.getElementById('checkReorderBtn').disabled = true;
-      } else {
-        userAnswer.forEach((item, idx) => {
-          const chip = document.createElement('div');
-          chip.className = 'word-chip selected';
-          chip.textContent = item.word;
-          chip.onclick = () => removeWordFromSentence(idx);
-          builder.appendChild(chip);
+      practiceData.forEach((item, index) => {
+        const correctAnswer = item.expression;
+        const userAnswer = userAnswers[index];
+        const feedback = document.getElementById(`feedback-${index}`);
+        const allOptions = document.querySelectorAll(`#options-${index} .practice-option`);
+        
+        allOptions.forEach(opt => {
+          opt.style.pointerEvents = 'none';
+          opt.classList.add('disabled');
+          
+          if (opt.textContent === correctAnswer) {
+            opt.classList.add('correct');
+            opt.style.background = 'rgba(76, 175, 80, 0.2)';
+            opt.style.borderColor = 'rgba(76, 175, 80, 0.8)';
+            opt.style.color = '#4CAF50';
+          }
         });
-      }
-    }
-
-    function clearSentence() {
-      userAnswer = [];
-      const builder = document.getElementById('sentenceBuilder');
-      builder.innerHTML = '<span style="color: #636366;">Click words below to build the sentence...</span>';
-      builder.classList.remove('has-words');
-      
-      document.querySelectorAll('.word-chip').forEach(chip => chip.classList.remove('used'));
-      document.getElementById('checkReorderBtn').disabled = true;
-    }
-
-    function checkReorder() {
-      const userSentence = userAnswer.map(item => item.word).join(' ');
-      const correctSentence = practiceData[currentPracticeIndex].sentence.replace(/<[^>]*>/g, '').trim();
-      const feedback = document.getElementById('feedback');
-      
-      practiceScore.total++;
-      
-      if (userSentence === correctSentence) {
-        practiceScore.correct++;
-        feedback.className = 'feedback correct';
-        feedback.innerHTML = `
-          ✓ Perfect! You've arranged the words correctly!
-          <div style="margin-top: 1rem;">
-            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
-          </div>
-        `;
-      } else {
-        feedback.className = 'feedback incorrect';
-        feedback.innerHTML = `
-          ✗ Not quite. The correct order is:<br><strong>${correctSentence}</strong>
-          <div style="margin-top: 1rem;">
-            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
-          </div>
-        `;
-      }
-      
-      document.querySelectorAll('.word-chip').forEach(chip => chip.style.pointerEvents = 'none');
-      document.getElementById('checkReorderBtn').disabled = true;
-      updatePracticeScore();
-    }
-
-    function showMultipleChoiceQuestion(item, card) {
-      const correctAnswer = item.expression;
-      
-      // Get wrong answers from other items
-      const allExpressions = practiceData
-        .filter(i => i.expression !== correctAnswer)
-        .map(i => i.expression);
-      
-      const wrongAnswers = shuffleArray(allExpressions).slice(0, 3);
-      const options = shuffleArray([correctAnswer, ...wrongAnswers]);
-      
-      const blankContext = item.context.replace('___', '<span style="color: #4a90e2; font-weight: 700;">[ ? ]</span>');
-      
-      card.innerHTML = `
-        <div class="card-label">MULTIPLE CHOICE</div>
-        <div class="practice-question">${blankContext}</div>
-        <div class="practice-options" id="practiceOptions"></div>
-        <div class="feedback" id="feedback"></div>
-      `;
-      
-      const optionsContainer = document.getElementById('practiceOptions');
-      options.forEach((option, index) => {
-        const btn = document.createElement('div');
-        btn.className = 'practice-option';
-        btn.textContent = option;
-        btn.onclick = () => checkMultipleChoice(option, correctAnswer, btn);
-        optionsContainer.appendChild(btn);
-      });
-    }
-
-    function checkMultipleChoice(selected, correct, button) {
-      practiceScore.total++;
-      const feedback = document.getElementById('feedback');
-      
-      document.querySelectorAll('.practice-option').forEach(opt => {
-        opt.classList.add('disabled');
-        if (opt.textContent === correct) {
-          opt.classList.add('correct');
+        
+        if (userAnswer === correctAnswer) {
+          practiceScore.correct++;
+          feedback.className = 'feedback correct';
+          feedback.innerHTML = `✓ Correct!`;
+        } else {
+          feedback.className = 'feedback incorrect';
+          feedback.innerHTML = `✗ Your answer: <strong>${userAnswer}</strong><br>Correct answer: <strong>${correctAnswer}</strong>`;
+          
+          allOptions.forEach(opt => {
+            if (opt.textContent === userAnswer) {
+              opt.classList.add('incorrect');
+            }
+          });
         }
       });
       
-      if (selected === correct) {
-        practiceScore.correct++;
-        button.classList.add('correct');
-        feedback.className = 'feedback correct';
-        feedback.innerHTML = `
-          ✓ Correct! "${correct}" is the right expression!
-          <div style="margin-top: 1rem;">
-            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
-          </div>
-        `;
-      } else {
-        button.classList.add('incorrect');
-        feedback.className = 'feedback incorrect';
-        feedback.innerHTML = `
-          ✗ Not quite. The correct answer is: <strong>${correct}</strong>
-          <div style="margin-top: 1rem;">
-            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
-          </div>
-        `;
-      }
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.5';
+      submitBtn.textContent = 'Answers Submitted';
       
       updatePracticeScore();
-    }
-
-    function showMatchingQuestion(item, card) {
-      // Get 4 random items including current
-      const items = shuffleArray([item, ...shuffleArray(practiceData.filter(i => i !== item)).slice(0, 3)]);
-      const expressions = shuffleArray(items.map(i => i.expression));
-      const contexts = items.map(i => i.context);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       
-      userAnswer = [];
-      
-      card.innerHTML = `
-        <div class="card-label">MATCH EXPRESSIONS TO CONTEXTS</div>
-        <div class="practice-question">Match each expression with its correct context:</div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; width: 100%; max-width: 700px; margin: 2rem 0;">
-          <div>
-            <div style="color: #C9A961; font-weight: 700; margin-bottom: 1rem; text-align: center;">EXPRESSIONS</div>
-            <div id="expressionList"></div>
-          </div>
-          <div>
-            <div style="color: #4a90e2; font-weight: 700; margin-bottom: 1rem; text-align: center;">CONTEXTS</div>
-            <div id="contextList"></div>
-          </div>
-        </div>
-        <div style="display: flex; gap: 1rem;">
-          <button class="check-btn" onclick="checkMatching()" id="checkMatchBtn" disabled>✓ Check Answers</button>
-          <button class="show-answer-btn" onclick="showAnswer()">💡 Show Answer</button>
-        </div>
-        <div class="feedback" id="feedback"></div>
-      `;
-      
-      const expressionList = document.getElementById('expressionList');
-      const contextList = document.getElementById('contextList');
-      
-      expressions.forEach((expr, index) => {
-        const btn = document.createElement('div');
-        btn.className = 'practice-option';
-        btn.textContent = expr;
-        btn.dataset.index = index;
-        btn.onclick = () => selectExpression(index);
-        expressionList.appendChild(btn);
-      });
-      
-      contexts.forEach((ctx, index) => {
-        const btn = document.createElement('div');
-        btn.className = 'practice-option';
-        btn.textContent = ctx.replace('___', '[ ? ]');
-        btn.dataset.index = index;
-        btn.onclick = () => selectContext(index);
-        contextList.appendChild(btn);
-      });
-      
-      // Store correct answers for checking
-      card.dataset.correctMatches = JSON.stringify(items.map(i => ({
-        expression: i.expression,
-        context: i.context
-      })));
-    }
-
-    let selectedExpression = null;
-    let selectedContext = null;
-
-    function selectExpression(index) {
-      document.querySelectorAll('#expressionList .practice-option').forEach(opt => opt.style.borderColor = 'rgba(74, 144, 226, 0.2)');
-      document.querySelectorAll('#expressionList .practice-option')[index].style.borderColor = '#C9A961';
-      selectedExpression = index;
-      
-      if (selectedContext !== null) {
-        createMatch();
-      }
-    }
-
-    function selectContext(index) {
-      document.querySelectorAll('#contextList .practice-option').forEach(opt => opt.style.borderColor = 'rgba(74, 144, 226, 0.2)');
-      document.querySelectorAll('#contextList .practice-option')[index].style.borderColor = '#4a90e2';
-      selectedContext = index;
-      
-      if (selectedExpression !== null) {
-        createMatch();
-      }
-    }
-
-    function createMatch() {
-      const exprText = document.querySelectorAll('#expressionList .practice-option')[selectedExpression].textContent;
-      const ctxText = document.querySelectorAll('#contextList .practice-option')[selectedContext].textContent;
-      
-      userAnswer.push({ expression: exprText, context: ctxText.replace('[ ? ]', '___') });
-      
-      document.querySelectorAll('#expressionList .practice-option')[selectedExpression].classList.add('disabled');
-      document.querySelectorAll('#contextList .practice-option')[selectedContext].classList.add('disabled');
-      
-      selectedExpression = null;
-      selectedContext = null;
-      
-      document.querySelectorAll('.practice-option').forEach(opt => opt.style.borderColor = 'rgba(74, 144, 226, 0.2)');
-      
-      if (userAnswer.length === 4) {
-        document.getElementById('checkMatchBtn').disabled = false;
-      }
-    }
-
-    function checkMatching() {
-      const card = document.getElementById('practiceCard');
-      const correctMatches = JSON.parse(card.dataset.correctMatches);
-      const feedback = document.getElementById('feedback');
-      
-      let correctCount = 0;
-      userAnswer.forEach(answer => {
-        const isCorrect = correctMatches.some(match => 
-          match.expression === answer.expression && match.context === answer.context
-        );
-        if (isCorrect) correctCount++;
-      });
-      
-      practiceScore.total++;
-      
-      if (correctCount === 4) {
-        practiceScore.correct++;
-        feedback.className = 'feedback correct';
-        feedback.innerHTML = `
-          ✓ Perfect! All matches are correct!
-          <div style="margin-top: 1rem;">
-            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
-          </div>
-        `;
-      } else {
-        feedback.className = 'feedback incorrect';
-        feedback.innerHTML = `
-          ✗ You got ${correctCount}/4 matches correct. Review the correct matches above.
-          <div style="margin-top: 1rem;">
-            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
-          </div>
-        `;
-      }
-      
-      updatePracticeScore();
-    }
-
-    function showAnswer() {
-      const item = practiceData[currentPracticeIndex];
-      const feedback = document.getElementById('feedback');
-      
-      feedback.className = 'feedback';
-      feedback.style.display = 'block';
-      feedback.style.background = 'rgba(201, 169, 97, 0.15)';
-      feedback.style.borderColor = 'rgba(201, 169, 97, 0.5)';
-      feedback.style.color = '#C9A961';
-      feedback.innerHTML = `
-        💡 The correct answer is: <strong>${item.expression}</strong><br>
-        Full sentence: ${item.sentence.replace(/<[^>]*>/g, '')}
-        <div style="margin-top: 1rem;">
-          <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
-        </div>
-      `;
-      
-      // Disable interaction
-      document.querySelectorAll('input, button:not(.next-practice-btn), .practice-option, .word-chip').forEach(el => {
-        el.disabled = true;
-        el.style.pointerEvents = 'none';
-      });
-    }
-
-    function nextPractice() {
-      currentPracticeIndex++;
-      showPracticeQuestion();
-    }
-
-    function showPracticeComplete() {
-      const card = document.getElementById('practiceCard');
-      const accuracy = practiceScore.total > 0 ? Math.round((practiceScore.correct / practiceScore.total) * 100) : 0;
-      
-      let message = '';
-      let emoji = '';
-      if (accuracy >= 90) {
-        message = 'Outstanding! You\'ve mastered these expressions!';
-        emoji = '🏆';
-      } else if (accuracy >= 70) {
-        message = 'Great job! Keep practicing to perfect your skills!';
-        emoji = '🌟';
-      } else if (accuracy >= 50) {
-        message = 'Good effort! Review the expressions and try again!';
-        emoji = '💪';
-      } else {
-        message = 'Keep learning! Practice makes perfect!';
-        emoji = '📚';
-      }
-      
-      card.innerHTML = `
-        <div class="card-icon">${emoji}</div>
-        <div style="font-size: 2rem; color: #C9A961; font-weight: 700; margin-bottom: 1rem;">
-          Practice Complete!
-        </div>
-        <div style="font-size: 1.25rem; color: #e5e5e7; margin-bottom: 2rem;">
-          ${message}
-        </div>
-        <div style="font-size: 3rem; color: #4a90e2; font-weight: 700; margin-bottom: 0.5rem;">
-          ${accuracy}%
-        </div>
-        <div style="font-size: 1rem; color: #8e8e93; margin-bottom: 3rem;">
-          ${practiceScore.correct} out of ${practiceScore.total} correct
-        </div>
-        <button class="reset-btn" onclick="initPractice()" style="font-size: 1.1rem; padding: 1.25rem 3rem;">
-          🎯 Try Another Practice Set
-        </button>
-      `;
+      setTimeout(() => {
+        const accuracy = Math.round((practiceScore.correct / practiceScore.total) * 100);
+        let message = '';
+        let emoji = '';
+        
+        if (accuracy >= 90) {
+          message = 'Outstanding! 🏆';
+          emoji = '🏆';
+        } else if (accuracy >= 70) {
+          message = 'Great job! 🌟';
+          emoji = '🌟';
+        } else if (accuracy >= 50) {
+          message = 'Good effort! 💪';
+          emoji = '💪';
+        } else {
+          message = 'Keep practicing! 📚';
+          emoji = '📚';
+        }
+        
+        alert(`${emoji} ${message}\n\nYour Score: ${practiceScore.correct}/${practiceScore.total} (${accuracy}%)\n\nReview your answers below, then click "New Practice Set" to try again!`);
+      }, 500);
     }
 
     function resetPractice() {
       initPractice();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function updatePracticeScore() {
       const accuracy = practiceScore.total > 0 ? Math.round((practiceScore.correct / practiceScore.total) * 100) : 0;
-      document.getElementById('practiceScore').textContent = 
-        `Score: ${practiceScore.correct}/${practiceScore.total} | Accuracy: ${accuracy}%`;
+      const answered = userAnswers.filter(a => a !== null).length;
+      
+      if (practiceScore.answered === 0) {
+        document.getElementById('practiceScore').textContent = 
+          `Question: ${answered}/${practiceData.length} answered | Ready to submit when all complete`;
+      } else {
+        document.getElementById('practiceScore').textContent = 
+          `Final Score: ${practiceScore.correct}/${practiceScore.total} correct | Accuracy: ${accuracy}%`;
+      }
     }
 
     function shuffleArray(array) {
@@ -1781,6 +1426,7 @@
       }
       return newArray;
     }
+
 
     // KEYBOARD SHORTCUTS
     document.addEventListener('keydown', (e) => {
