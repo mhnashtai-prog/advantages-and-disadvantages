@@ -113,6 +113,13 @@
       border-color: rgba(201, 169, 97, 0.5);
       box-shadow: 0 0 20px rgba(201, 169, 97, 0.3);
     }
+
+    .level-btn.practice-active {
+      background: rgba(74, 144, 226, 0.15);
+      color: #4a90e2;
+      border-color: rgba(74, 144, 226, 0.5);
+      box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+    }
     
     .progress-section {
       background: rgba(28, 28, 30, 0.85);
@@ -435,6 +442,271 @@
     .color-expression { background: #C9A961; }
     .color-subject { background: #4a90e2; }
     .color-verb { background: #b94e48; }
+
+    /* PRACTICE MODE STYLES */
+    .practice-container {
+      display: none;
+    }
+
+    .practice-container.active {
+      display: block;
+    }
+
+    .practice-type-selector {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .practice-type-btn {
+      padding: 0.75rem 1.5rem;
+      background: rgba(28, 28, 30, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(74, 144, 226, 0.25);
+      border-radius: 0.75rem;
+      color: #8e8e93;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .practice-type-btn:hover {
+      background: rgba(28, 28, 30, 0.95);
+      color: #4a90e2;
+      border-color: rgba(74, 144, 226, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .practice-type-btn.active {
+      background: rgba(74, 144, 226, 0.15);
+      color: #4a90e2;
+      border-color: rgba(74, 144, 226, 0.5);
+      box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+    }
+
+    .practice-card {
+      background: rgba(28, 28, 30, 0.98);
+      backdrop-filter: blur(40px) saturate(150%);
+      border: 1.5px solid rgba(74, 144, 226, 0.25);
+      border-radius: 1.5rem;
+      padding: 3rem 2rem;
+      margin-bottom: 2rem;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .practice-question {
+      font-size: 1.25rem;
+      color: #e5e5e7;
+      margin-bottom: 2rem;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .practice-input {
+      width: 100%;
+      max-width: 600px;
+      padding: 1rem 1.5rem;
+      background: rgba(28, 28, 30, 0.9);
+      border: 2px solid rgba(74, 144, 226, 0.3);
+      border-radius: 0.75rem;
+      color: #e5e5e7;
+      font-size: 1.1rem;
+      font-family: 'DM Sans', sans-serif;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s;
+    }
+
+    .practice-input:focus {
+      outline: none;
+      border-color: #4a90e2;
+      box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+    }
+
+    .practice-options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .practice-option {
+      padding: 1rem 1.5rem;
+      background: rgba(28, 28, 30, 0.9);
+      border: 2px solid rgba(74, 144, 226, 0.2);
+      border-radius: 0.75rem;
+      color: #e5e5e7;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: left;
+    }
+
+    .practice-option:hover {
+      background: rgba(28, 28, 30, 1);
+      border-color: rgba(74, 144, 226, 0.5);
+      transform: translateX(5px);
+    }
+
+    .practice-option.correct {
+      background: rgba(76, 175, 80, 0.2);
+      border-color: rgba(76, 175, 80, 0.8);
+      color: #4CAF50;
+    }
+
+    .practice-option.incorrect {
+      background: rgba(244, 67, 54, 0.2);
+      border-color: rgba(244, 67, 54, 0.8);
+      color: #f44336;
+    }
+
+    .practice-option.disabled {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .word-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .word-chip {
+      padding: 0.75rem 1.25rem;
+      background: rgba(74, 144, 226, 0.15);
+      border: 2px solid rgba(74, 144, 226, 0.3);
+      border-radius: 0.75rem;
+      color: #4a90e2;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      user-select: none;
+    }
+
+    .word-chip:hover {
+      background: rgba(74, 144, 226, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .word-chip.used {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .word-chip.selected {
+      background: rgba(201, 169, 97, 0.25);
+      border-color: rgba(201, 169, 97, 0.5);
+      color: #C9A961;
+    }
+
+    .sentence-builder {
+      min-height: 100px;
+      padding: 1.5rem;
+      background: rgba(28, 28, 30, 0.9);
+      border: 2px dashed rgba(74, 144, 226, 0.3);
+      border-radius: 0.75rem;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #e5e5e7;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .sentence-builder.has-words {
+      border-style: solid;
+    }
+
+    .check-btn, .next-practice-btn, .show-answer-btn {
+      padding: 1rem 3rem;
+      background: #4a90e2;
+      color: #fff;
+      border: none;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin: 0.5rem;
+    }
+
+    .check-btn:hover, .next-practice-btn:hover, .show-answer-btn:hover {
+      background: #5a9ee8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(74, 144, 226, 0.4);
+    }
+
+    .check-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .show-answer-btn {
+      background: rgba(201, 169, 97, 0.8);
+    }
+
+    .show-answer-btn:hover {
+      background: #C9A961;
+    }
+
+    .feedback {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+      display: none;
+    }
+
+    .feedback.correct {
+      display: block;
+      background: rgba(76, 175, 80, 0.2);
+      border: 2px solid rgba(76, 175, 80, 0.5);
+      color: #4CAF50;
+    }
+
+    .feedback.incorrect {
+      display: block;
+      background: rgba(244, 67, 54, 0.2);
+      border: 2px solid rgba(244, 67, 54, 0.5);
+      color: #f44336;
+    }
+
+    .practice-score {
+      background: rgba(74, 144, 226, 0.15);
+      border: 1px solid rgba(74, 144, 226, 0.3);
+      border-radius: 1rem;
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      font-size: 1.1rem;
+      color: #4a90e2;
+      font-weight: 600;
+    }
+
+    .blank {
+      display: inline-block;
+      min-width: 120px;
+      border-bottom: 2px solid #4a90e2;
+      margin: 0 0.25rem;
+      padding: 0 0.5rem;
+      height: 1.5em;
+    }
     
     @media (max-width: 768px) {
       body {
@@ -445,12 +717,12 @@
         font-size: 2rem;
       }
       
-      .card-face {
+      .card-face, .practice-card {
         min-height: 450px;
         padding: 2rem 1.5rem;
       }
       
-      .card-main-text {
+      .card-main-text, .practice-question {
         font-size: 1.25rem;
       }
       
@@ -467,11 +739,11 @@
         height: 3rem;
       }
 
-      .level-selector {
+      .level-selector, .practice-type-selector {
         gap: 0.5rem;
       }
 
-      .level-btn {
+      .level-btn, .practice-type-btn {
         padding: 0.5rem 1rem;
         font-size: 0.75rem;
       }
@@ -499,59 +771,85 @@
       <button class="level-btn" onclick="changeLevel('disadvantages')" id="btnDisadvantages">Introducing Disadvantages</button>
       <button class="level-btn" onclick="changeLevel('arguments')" id="btnArguments">Arguments & Criticism</button>
       <button class="level-btn" onclick="changeLevel('balancing')" id="btnBalancing">Balancing & Concluding</button>
+      <button class="level-btn" onclick="togglePracticeMode()" id="btnPractice">🎯 Practice Mode</button>
     </div>
 
-    <div class="legend">
-      <div class="legend-item">
-        <div class="legend-color color-expression"></div>
-        <span>Key Expression</span>
-      </div>
-      <div class="legend-item">
-        <div class="legend-color color-subject"></div>
-        <span>Subject/Topic</span>
-      </div>
-      <div class="legend-item">
-        <div class="legend-color color-verb"></div>
-        <span>Verb</span>
-      </div>
-    </div>
-    
-    <div class="progress-section">
-      <div class="progress-header">
-        <span>Progress</span>
-        <span id="progressText">0/0 viewed</span>
-      </div>
-      <div class="progress-bar-container">
-        <div class="progress-bar" id="progressBar"></div>
-      </div>
-    </div>
-    
-    <div class="card-container">
-      <div class="card" id="card" onclick="flipCard()">
-        <div class="card-face card-front">
-          <div class="card-label">ESSAY EXPRESSION</div>
-          <div class="category-badge" id="categoryFront"></div>
-          <div class="card-icon" id="iconFront">✍️</div>
-          <div class="card-main-text" id="sentenceText"></div>
-          <div class="card-hint">💡 Click card to see structure breakdown</div>
+    <!-- LEARNING MODE -->
+    <div id="learningMode">
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-color color-expression"></div>
+          <span>Key Expression</span>
         </div>
-        <div class="card-face card-back">
-          <div class="card-label">STRUCTURE & USAGE</div>
-          <div class="category-badge" id="categoryBack"></div>
-          <div class="card-icon" id="iconBack">🔍</div>
-          <div id="breakdownContent"></div>
-          <div class="card-hint">💡 Click to see example again</div>
+        <div class="legend-item">
+          <div class="legend-color color-subject"></div>
+          <span>Subject/Topic</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color color-verb"></div>
+          <span>Verb</span>
         </div>
       </div>
-    </div>
-    
-    <div class="controls">
-      <div class="arrows">
-        <div class="arrow" onclick="prevCard(); event.stopPropagation();">←</div>
-        <div class="arrow" onclick="nextCard(); event.stopPropagation();">→</div>
+      
+      <div class="progress-section">
+        <div class="progress-header">
+          <span>Progress</span>
+          <span id="progressText">0/0 viewed</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
       </div>
-      <div class="nav-dots" id="navDots"></div>
-      <button class="reset-btn" onclick="resetProgress()">↻ Reset Progress</button>
+      
+      <div class="card-container">
+        <div class="card" id="card" onclick="flipCard()">
+          <div class="card-face card-front">
+            <div class="card-label">ESSAY EXPRESSION</div>
+            <div class="category-badge" id="categoryFront"></div>
+            <div class="card-icon" id="iconFront">✍️</div>
+            <div class="card-main-text" id="sentenceText"></div>
+            <div class="card-hint">💡 Click card to see structure breakdown</div>
+          </div>
+          <div class="card-face card-back">
+            <div class="card-label">STRUCTURE & USAGE</div>
+            <div class="category-badge" id="categoryBack"></div>
+            <div class="card-icon" id="iconBack">🔍</div>
+            <div id="breakdownContent"></div>
+            <div class="card-hint">💡 Click to see example again</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="controls">
+        <div class="arrows">
+          <div class="arrow" onclick="prevCard(); event.stopPropagation();">←</div>
+          <div class="arrow" onclick="nextCard(); event.stopPropagation();">→</div>
+        </div>
+        <div class="nav-dots" id="navDots"></div>
+        <button class="reset-btn" onclick="resetProgress()">↻ Reset Progress</button>
+      </div>
+    </div>
+
+    <!-- PRACTICE MODE -->
+    <div id="practiceMode" class="practice-container">
+      <div class="practice-type-selector">
+        <button class="practice-type-btn active" onclick="changePracticeType('fillblank')" id="btnFillBlank">Fill in the Blanks</button>
+        <button class="practice-type-btn" onclick="changePracticeType('reorder')" id="btnReorder">Reorder Words</button>
+        <button class="practice-type-btn" onclick="changePracticeType('multiple')" id="btnMultiple">Multiple Choice</button>
+        <button class="practice-type-btn" onclick="changePracticeType('matching')" id="btnMatching">Match Expressions</button>
+      </div>
+
+      <div class="practice-score" id="practiceScore">
+        Score: 0/0 | Accuracy: 0%
+      </div>
+
+      <div class="practice-card" id="practiceCard">
+        <!-- Dynamic practice content goes here -->
+      </div>
+
+      <div class="controls" style="margin-top: 1rem;">
+        <button class="reset-btn" onclick="resetPractice()">🔄 New Practice Set</button>
+      </div>
     </div>
   </div>
 
@@ -560,458 +858,257 @@
       advantages: [
         {
           sentence: "<span class='expression'>One of the key advantages of</span> <span class='subject'>remote work</span> <span class='verb'>is</span> increased flexibility.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>One of the key advantages of X is...</span>"},
-            {label: "Usage", text: "Introducing the first or most important advantage"},
-            {label: "Variants", text: "One of the main benefits of... / A key advantage of... / The primary benefit of..."},
-            {label: "Level", text: "B2 - Academic formal"},
-            {label: "Follow-up", text: "Explain WHY this is an advantage with specific examples"}
-          ]
+          expression: "One of the key advantages of",
+          context: "remote work is increased flexibility"
         },
         {
           sentence: "<span class='subject'>Online learning</span> <span class='expression'>enables</span> students to study at their own pace.",
-          breakdown: [
-            {label: "Verb", text: "<span class='verb'>Enables</span> (allows/permits/makes possible)"},
-            {label: "Pattern", text: "Subject + enables + object + to + verb"},
-            {label: "Synonyms", text: "Allows, permits, makes it possible for, empowers"},
-            {label: "Usage", text: "Shows how something gives ability or opportunity"},
-            {label: "Example", text: "Technology enables us to communicate instantly across the world"}
-          ]
+          expression: "enables",
+          context: "Online learning ___ students to study at their own pace"
         },
         {
           sentence: "<span class='subject'>Social media</span> <span class='expression'>encourages</span> people to stay connected with friends and family.",
-          breakdown: [
-            {label: "Verb", text: "<span class='verb'>Encourages</span> (promotes/facilitates)"},
-            {label: "Pattern", text: "Subject + encourages/promotes + object + to + verb"},
-            {label: "Similar verbs", text: "Promotes, facilitates, fosters, stimulates, inspires"},
-            {label: "Tone", text: "Positive - suggests something beneficial is happening"},
-            {label: "Context", text: "Use when describing positive influences or outcomes"}
-          ]
+          expression: "encourages",
+          context: "Social media ___ people to stay connected"
         },
         {
           sentence: "<span class='subject'>Electric vehicles</span> <span class='expression'>make it easier to</span> reduce carbon emissions.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>Make(s) it easier to...</span>"},
-            {label: "Pattern", text: "Subject + makes it easier to + verb"},
-            {label: "Variants", text: "Makes it possible to... / Makes it simpler to... / Facilitates..."},
-            {label: "Usage", text: "Shows how something simplifies or improves a process"},
-            {label: "Opposite", text: "Makes it harder to... / Makes it difficult to..."}
-          ]
+          expression: "make it easier to",
+          context: "Electric vehicles ___ reduce carbon emissions"
         },
         {
           sentence: "<span class='expression'>The main argument in favour of</span> <span class='subject'>renewable energy</span> is environmental sustainability.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>The main argument in favour of X is...</span>"},
-            {label: "Level", text: "C1 - Very formal/academic"},
-            {label: "Usage", text: "Presenting the strongest supporting argument"},
-            {label: "Structure", text: "Can also write: The main argument for X is..."},
-            {label: "Follow-up", text: "Provide evidence and examples to support this argument"}
-          ]
+          expression: "The main argument in favour of",
+          context: "___ renewable energy is environmental sustainability"
         },
         {
           sentence: "<span class='expression'>One positive aspect of</span> <span class='subject'>urbanization</span> <span class='verb'>is</span> improved access to services.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>One positive aspect of X is...</span>"},
-            {label: "Variants", text: "A positive aspect of... / One benefit of... / A favorable feature of..."},
-            {label: "Usage", text: "More neutral than 'advantage' - good for balanced essays"},
-            {label: "Opposite", text: "One negative aspect of... / One drawback of..."},
-            {label: "Level", text: "B2-C1"}
-          ]
+          expression: "One positive aspect of",
+          context: "___ urbanization is improved access to services"
         },
         {
           sentence: "<span class='subject'>Public transportation</span> <span class='expression'>helps</span> reduce traffic congestion in cities.",
-          breakdown: [
-            {label: "Verb", text: "<span class='verb'>Helps</span> (assists/aids in)"},
-            {label: "Pattern", text: "Subject + helps (to) + verb / helps + object + verb"},
-            {label: "Usage", text: "'Helps' is slightly less formal than 'facilitates' or 'enables'"},
-            {label: "Note", text: "'To' is optional: helps reduce = helps to reduce"},
-            {label: "Context", text: "Showing how something contributes to a positive outcome"}
-          ]
+          expression: "helps",
+          context: "Public transportation ___ reduce traffic congestion"
         },
         {
           sentence: "<span class='expression'>A major benefit of</span> <span class='subject'>bilingualism</span> is enhanced cognitive flexibility.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>A major benefit of X is...</span>"},
-            {label: "Synonyms", text: "A significant advantage / A key strength / An important plus"},
-            {label: "Usage", text: "Highlighting an important positive point"},
-            {label: "Level", text: "B2+ - Academic"},
-            {label: "Structure", text: "Can list multiple: A major benefit is... Another benefit is..."}
-          ]
+          expression: "A major benefit of",
+          context: "___ bilingualism is enhanced cognitive flexibility"
         },
         {
           sentence: "<span class='subject'>Automation</span> <span class='expression'>permits</span> companies to increase productivity significantly.",
-          breakdown: [
-            {label: "Verb", text: "<span class='verb'>Permits</span> (allows/enables - formal)"},
-            {label: "Pattern", text: "Subject + permits + object + to + verb"},
-            {label: "Formality", text: "More formal than 'allows', less common than 'enables'"},
-            {label: "Usage", text: "Academic and business contexts"},
-            {label: "Synonyms", text: "Allows, enables, makes it possible for"}
-          ]
+          expression: "permits",
+          context: "Automation ___ companies to increase productivity"
         },
         {
           sentence: "<span class='subject'>Flexible working hours</span> <span class='expression'>let</span> employees balance work and personal life more effectively.",
-          breakdown: [
-            {label: "Verb", text: "<span class='verb'>Let</span> (allow - informal)"},
-            {label: "Pattern", text: "Subject + lets + object + bare infinitive (no 'to')"},
-            {label: "Note", text: "'Lets' is less formal - better for general essays, not academic"},
-            {label: "Formal alternative", text: "Allow, enable, permit"},
-            {label: "Example", text: "Technology lets us work from anywhere"}
-          ]
+          expression: "let",
+          context: "Flexible working hours ___ employees balance work and personal life"
         }
       ],
       
       disadvantages: [
         {
           sentence: "<span class='expression'>One of the disadvantages of</span> <span class='subject'>social media</span> <span class='verb'>is</span> the spread of misinformation.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>One of the disadvantages of X is...</span>"},
-            {label: "Usage", text: "Introducing a key negative point"},
-            {label: "Variants", text: "One drawback of... / A disadvantage of... / One problem with..."},
-            {label: "Level", text: "B2 - Academic formal"},
-            {label: "Structure", text: "Follow with explanation and examples"}
-          ]
+          expression: "One of the disadvantages of",
+          context: "___ social media is the spread of misinformation"
         },
         {
           sentence: "<span class='expression'>One of the arguments against</span> <span class='subject'>nuclear energy</span> is the issue of radioactive waste.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>One of the arguments against X is...</span>"},
-            {label: "Level", text: "C1 - Formal academic"},
-            {label: "Usage", text: "Presenting opposing viewpoints"},
-            {label: "Variants", text: "The main argument against... / A key objection to... / Critics argue that..."},
-            {label: "Context", text: "Balanced, objective essay tone"}
-          ]
+          expression: "One of the arguments against",
+          context: "___ nuclear energy is radioactive waste"
         },
         {
           sentence: "<span class='expression'>One of the problems is</span> <span class='subject'>the high cost of implementation</span>.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>One of the problems is...</span>"},
-            {label: "Usage", text: "Identifying specific difficulties or challenges"},
-            {label: "Variants", text: "A major problem is... / The main issue is... / One challenge is..."},
-            {label: "Note", text: "More direct than 'disadvantage' - suggests something needs fixing"},
-            {label: "Level", text: "B2"}
-          ]
+          expression: "One of the problems is",
+          context: "___ the high cost of implementation"
         },
         {
           sentence: "<span class='subject'>Excessive screen time</span> <span class='expression'>can lead to</span> various health problems.",
-          breakdown: [
-            {label: "Expression", text: "<span class='verb'>Can lead to...</span> (result in/cause)"},
-            {label: "Pattern", text: "Subject + can lead to + noun/noun phrase"},
-            {label: "Usage", text: "Showing negative consequences or outcomes"},
-            {label: "Synonyms", text: "Results in, causes, brings about, gives rise to"},
-            {label: "Level", text: "B2 - Very common in essays"}
-          ]
+          expression: "can lead to",
+          context: "Excessive screen time ___ various health problems"
         },
         {
           sentence: "<span class='subject'>Strict regulations</span> <span class='expression'>prevent</span> companies from innovating quickly.",
-          breakdown: [
-            {label: "Verb", text: "<span class='verb'>Prevent</span> (stop/hinder/block)"},
-            {label: "Pattern", text: "Subject + prevents + object + from + verb-ing"},
-            {label: "Usage", text: "Showing how something stops or blocks progress"},
-            {label: "Similar verbs", text: "Hinders, discourages, restricts, limits, impedes"},
-            {label: "Opposite", text: "Enables, encourages, facilitates, promotes"}
-          ]
+          expression: "prevent",
+          context: "Strict regulations ___ companies from innovating quickly"
         },
         {
           sentence: "<span class='expression'>One criticism about</span> <span class='subject'>standardized testing</span> is that it doesn't measure creativity.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>One criticism about X is...</span>"},
-            {label: "Level", text: "C1 - Academic"},
-            {label: "Usage", text: "Presenting critical viewpoints"},
-            {label: "Variants", text: "A common criticism... / Critics argue that... / One critique is..."},
-            {label: "Tone", text: "More analytical than 'problem' or 'disadvantage'"}
-          ]
+          expression: "One criticism about",
+          context: "___ standardized testing is it doesn't measure creativity"
         },
         {
           sentence: "<span class='subject'>Fast fashion</span> <span class='expression'>results in</span> massive environmental pollution.",
-          breakdown: [
-            {label: "Verb", text: "<span class='verb'>Results in</span> (causes/leads to)"},
-            {label: "Pattern", text: "Subject + results in + noun/noun phrase"},
-            {label: "Usage", text: "Showing direct negative consequences"},
-            {label: "Synonyms", text: "Leads to, causes, brings about, produces"},
-            {label: "Level", text: "B2+ - Academic"}
-          ]
+          expression: "results in",
+          context: "Fast fashion ___ massive environmental pollution"
         },
         {
           sentence: "<span class='expression'>One negative aspect of</span> <span class='subject'>artificial intelligence</span> is potential job displacement.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>One negative aspect of X is...</span>"},
-            {label: "Usage", text: "More neutral than 'problem' - good for balanced tone"},
-            {label: "Opposite", text: "One positive aspect of... / One benefit of..."},
-            {label: "Variants", text: "A negative feature... / An adverse aspect... / A concerning element..."},
-            {label: "Level", text: "B2-C1"}
-          ]
+          expression: "One negative aspect of",
+          context: "___ artificial intelligence is job displacement"
         },
         {
           sentence: "<span class='subject'>Bureaucracy</span> <span class='expression'>discourages</span> people from starting their own businesses.",
-          breakdown: [
-            {label: "Verb", text: "<span class='verb'>Discourages</span> (demotivates/deters)"},
-            {label: "Pattern", text: "Subject + discourages + object + from + verb-ing"},
-            {label: "Usage", text: "Shows how something reduces motivation or willingness"},
-            {label: "Opposite", text: "Encourages, motivates, inspires, promotes"},
-            {label: "Similar", text: "Deters, dissuades, puts off, demotivates"}
-          ]
+          expression: "discourages",
+          context: "Bureaucracy ___ people from starting businesses"
         },
         {
           sentence: "<span class='expression'>A drawback of</span> <span class='subject'>working from home</span> is social isolation.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>A drawback of X is...</span>"},
-            {label: "Level", text: "B2-C1 - Formal"},
-            {label: "Usage", text: "Academic essays - more formal than 'downside'"},
-            {label: "Variants", text: "One drawback is... / The main drawback... / A significant drawback..."},
-            {label: "Opposite", text: "A benefit of... / An advantage of..."}
-          ]
+          expression: "A drawback of",
+          context: "___ working from home is social isolation"
         },
         {
           sentence: "<span class='subject'>Traffic congestion</span> <span class='expression'>hinders</span> economic development in major cities.",
-          breakdown: [
-            {label: "Verb", text: "<span class='verb'>Hinders</span> (impedes/obstructs - formal)"},
-            {label: "Pattern", text: "Subject + hinders + noun"},
-            {label: "Usage", text: "Shows how something blocks or slows progress"},
-            {label: "Level", text: "C1 - Academic formal"},
-            {label: "Synonyms", text: "Impedes, obstructs, hampers, restricts, constrains"}
-          ]
+          expression: "hinders",
+          context: "Traffic congestion ___ economic development"
         }
       ],
       
       arguments: [
         {
           sentence: "<span class='expression'>The main argument in favour of</span> <span class='subject'>capital punishment</span> is deterrence.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>The main argument in favour of X is...</span>"},
-            {label: "Level", text: "C1 - Very formal/academic"},
-            {label: "Usage", text: "Presenting the strongest supporting argument"},
-            {label: "American spelling", text: "In favor of (US) / In favour of (UK)"},
-            {label: "Opposite", text: "The main argument against..."}
-          ]
+          expression: "The main argument in favour of",
+          context: "___ capital punishment is deterrence"
         },
         {
           sentence: "<span class='expression'>Proponents argue that</span> <span class='subject'>genetic engineering</span> <span class='verb'>could solve</span> world hunger.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>Proponents argue that...</span>"},
-            {label: "Usage", text: "Introducing what supporters believe"},
-            {label: "Level", text: "C1 - Academic"},
-            {label: "Opposite", text: "Opponents/Critics argue that..."},
-            {label: "Variants", text: "Advocates suggest... / Supporters claim... / Proponents believe..."}
-          ]
+          expression: "Proponents argue that",
+          context: "___ genetic engineering could solve world hunger"
         },
         {
           sentence: "<span class='expression'>Critics claim that</span> <span class='subject'>standardized tests</span> <span class='verb'>fail to</span> measure true intelligence.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>Critics claim that...</span>"},
-            {label: "Usage", text: "Presenting opposing viewpoints or criticism"},
-            {label: "Variants", text: "Critics argue/maintain/contend/assert that..."},
-            {label: "Level", text: "C1 - Academic"},
-            {label: "Opposite", text: "Supporters/Proponents claim that..."}
-          ]
+          expression: "Critics claim that",
+          context: "___ standardized tests fail to measure intelligence"
         },
         {
           sentence: "<span class='expression'>One criticism about</span> <span class='subject'>consumerism</span> is its environmental impact.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>One criticism about/of X is...</span>"},
-            {label: "Usage", text: "Introducing critical perspectives"},
-            {label: "Variants", text: "A common criticism... / A major critique... / One objection..."},
-            {label: "Level", text: "C1"},
-            {label: "Follow-up", text: "Explain the criticism with evidence"}
-          ]
+          expression: "One criticism about",
+          context: "___ consumerism is its environmental impact"
         },
         {
           sentence: "<span class='expression'>It is often argued that</span> <span class='subject'>technology</span> <span class='verb'>makes</span> people less social.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>It is often argued that...</span>"},
-            {label: "Usage", text: "Presenting common viewpoints neutrally"},
-            {label: "Variants", text: "It is commonly believed... / Many argue... / Some claim..."},
-            {label: "Level", text: "B2-C1"},
-            {label: "Tone", text: "Neutral - doesn't show if you agree or disagree"}
-          ]
+          expression: "It is often argued that",
+          context: "___ technology makes people less social"
         },
         {
           sentence: "<span class='expression'>Opponents contend that</span> <span class='subject'>free trade</span> <span class='verb'>harms</span> domestic industries.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>Opponents contend that...</span>"},
-            {label: "Verb", text: "Contend = argue/claim (formal)"},
-            {label: "Level", text: "C1-C2 - Very formal"},
-            {label: "Variants", text: "Opponents maintain/assert/argue that..."},
-            {label: "Opposite", text: "Proponents/Supporters contend that..."}
-          ]
+          expression: "Opponents contend that",
+          context: "___ free trade harms domestic industries"
         },
         {
           sentence: "<span class='expression'>There is an ongoing debate about</span> whether <span class='subject'>AI</span> will benefit or harm humanity.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>There is an ongoing debate about...</span>"},
-            {label: "Usage", text: "Introducing controversial topics"},
-            {label: "Variants", text: "There is debate over... / X is hotly debated / X remains controversial"},
-            {label: "Level", text: "C1"},
-            {label: "Structure", text: "Can follow with 'whether' or 'about/over + noun'"}
-          ]
+          expression: "There is an ongoing debate about",
+          context: "___ whether AI will benefit humanity"
         },
         {
           sentence: "<span class='expression'>A common objection to</span> <span class='subject'>wind farms</span> is their visual impact on landscapes.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>A common objection to X is...</span>"},
-            {label: "Usage", text: "Presenting frequent criticisms"},
-            {label: "Variants", text: "A frequent objection... / One objection... / Critics object that..."},
-            {label: "Level", text: "C1 - Academic"},
-            {label: "Tone", text: "Formal, analytical"}
-          ]
+          expression: "A common objection to",
+          context: "___ wind farms is their visual impact"
         },
         {
           sentence: "<span class='expression'>Advocates maintain that</span> <span class='subject'>veganism</span> <span class='verb'>is</span> the most ethical diet.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>Advocates maintain that...</span>"},
-            {label: "Verb", text: "Maintain = argue/claim (formal, suggests ongoing belief)"},
-            {label: "Usage", text: "Presenting what supporters strongly believe"},
-            {label: "Level", text: "C1"},
-            {label: "Synonyms", text: "Advocates argue/contend/assert/claim that..."}
-          ]
+          expression: "Advocates maintain that",
+          context: "___ veganism is the most ethical diet"
         },
         {
           sentence: "<span class='expression'>Skeptics question whether</span> <span class='subject'>renewable energy</span> can truly replace fossil fuels.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>Skeptics question whether...</span>"},
-            {label: "Usage", text: "Introducing doubts or uncertainties"},
-            {label: "Variants", text: "Critics doubt that... / Some question whether... / There are doubts about..."},
-            {label: "Level", text: "C1"},
-            {label: "Tone", text: "Shows uncertainty or criticism"}
-          ]
+          expression: "Skeptics question whether",
+          context: "___ renewable energy can replace fossil fuels"
         }
       ],
       
       balancing: [
         {
           sentence: "<span class='expression'>On the one hand,</span> <span class='subject'>social media</span> connects people. <span class='expression'>On the other hand,</span> it can be addictive.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>On the one hand... On the other hand...</span>"},
-            {label: "Usage", text: "Presenting contrasting viewpoints (ALWAYS use both together)"},
-            {label: "Level", text: "B2 - Very common in essays"},
-            {label: "Structure", text: "First paragraph: On the one hand... Second: On the other hand..."},
-            {label: "Note", text: "NEVER use 'on one hand' - must include 'the'"}
-          ]
+          expression: "On the one hand / On the other hand",
+          context: "___ social media connects people. ___ it can be addictive"
         },
         {
           sentence: "<span class='expression'>While</span> <span class='subject'>technology</span> improves efficiency, <span class='expression'>it also</span> threatens jobs.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>While X... it also...</span>"},
-            {label: "Usage", text: "Showing contrast in one sentence"},
-            {label: "Variants", text: "Although... / Whilst... (UK) / Even though..."},
-            {label: "Structure", text: "Concession first, then main point"},
-            {label: "Level", text: "B2"}
-          ]
+          expression: "While / it also",
+          context: "___ technology improves efficiency, ___ threatens jobs"
         },
         {
           sentence: "<span class='expression'>Despite the benefits,</span> <span class='subject'>globalization</span> <span class='verb'>has</span> significant drawbacks.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>Despite + noun/noun phrase</span>"},
-            {label: "Pattern", text: "Despite + noun, main clause"},
-            {label: "Usage", text: "Acknowledging positives before presenting negatives"},
-            {label: "Variants", text: "In spite of... / Notwithstanding... (very formal)"},
-            {label: "Note", text: "NEVER 'despite of' - it's incorrect!"}
-          ]
+          expression: "Despite the benefits",
+          context: "___ globalization has significant drawbacks"
         },
         {
           sentence: "<span class='expression'>However,</span> not all the effects of <span class='subject'>urbanization</span> are positive.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>However,</span> (transition word)"},
-            {label: "Usage", text: "Introducing contrasting point or change of direction"},
-            {label: "Punctuation", text: "However, (comma after) OR ; however, (semicolon before)"},
-            {label: "Variants", text: "Nevertheless, Nonetheless, Yet, Still"},
-            {label: "Level", text: "B2 - Essential for essays"}
-          ]
+          expression: "However",
+          context: "___ not all effects of urbanization are positive"
         },
         {
           sentence: "<span class='expression'>Although</span> <span class='subject'>online learning</span> offers flexibility, <span class='expression'>it lacks</span> face-to-face interaction.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>Although + clause</span>"},
-            {label: "Structure", text: "Although + concession, main point"},
-            {label: "Usage", text: "Acknowledging one side before presenting the other"},
-            {label: "Variants", text: "Though, Even though, While, Whilst"},
-            {label: "Level", text: "B2"}
-          ]
+          expression: "Although / it lacks",
+          context: "___ online learning offers flexibility, ___ face-to-face interaction"
         },
         {
           sentence: "<span class='expression'>In conclusion,</span> <span class='expression'>the advantages outweigh the disadvantages.</span>",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>In conclusion, / To conclude,</span>"},
-            {label: "Usage", text: "Signaling final paragraph"},
-            {label: "Phrase", text: "<span class='expression'>The advantages outweigh the disadvantages</span> = positives are stronger"},
-            {label: "Variants", text: "To sum up, Overall, All things considered"},
-            {label: "Level", text: "B2"}
-          ]
+          expression: "In conclusion / outweigh",
+          context: "___ the advantages ___ the disadvantages"
         },
         {
           sentence: "<span class='expression'>Weighing up both sides,</span> I believe the benefits are more significant.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>Weighing up both sides,</span>"},
-            {label: "Usage", text: "Showing you've considered all arguments before concluding"},
-            {label: "Variants", text: "Having considered both sides... / Taking everything into account..."},
-            {label: "Level", text: "C1"},
-            {label: "Tone", text: "Balanced, thoughtful conclusion"}
-          ]
+          expression: "Weighing up both sides",
+          context: "___ I believe the benefits are more significant"
         },
         {
           sentence: "<span class='expression'>It is worth noting that</span> <span class='subject'>renewable energy</span> <span class='verb'>requires</span> significant initial investment.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>It is worth noting that...</span>"},
-            {label: "Usage", text: "Adding important additional information"},
-            {label: "Variants", text: "It should be noted that... / It is important to note... / Notably..."},
-            {label: "Level", text: "C1"},
-            {label: "Context", text: "Drawing attention to significant points"}
-          ]
+          expression: "It is worth noting that",
+          context: "___ renewable energy requires investment"
         },
         {
           sentence: "<span class='expression'>Nevertheless,</span> the long-term benefits <span class='verb'>justify</span> the costs.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>Nevertheless,</span> (formal contrast)"},
-            {label: "Meaning", text: "'Despite what was just said' - stronger than 'however'"},
-            {label: "Usage", text: "Showing contrast after acknowledging opposing point"},
-            {label: "Level", text: "C1 - Formal"},
-            {label: "Synonyms", text: "Nonetheless, Even so, That said"}
-          ]
+          expression: "Nevertheless / justify",
+          context: "___ the long-term benefits ___ the costs"
         },
         {
           sentence: "<span class='expression'>Taking everything into account,</span> the positives <span class='verb'>outweigh</span> the negatives.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>Taking everything into account,</span>"},
-            {label: "Usage", text: "Final conclusion after considering all points"},
-            {label: "Variants", text: "All things considered, On balance, Overall"},
-            {label: "Phrase", text: "X outweighs Y = X is more important/significant than Y"},
-            {label: "Level", text: "C1"}
-          ]
+          expression: "Taking everything into account / outweigh",
+          context: "___ the positives ___ the negatives"
         },
         {
           sentence: "<span class='expression'>That being said,</span> we must acknowledge the environmental concerns.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>That being said,</span>"},
-            {label: "Meaning", text: "'Despite what I just mentioned'"},
-            {label: "Usage", text: "Introducing contrasting point or limitation"},
-            {label: "Level", text: "C1 - Less formal than 'nevertheless'"},
-            {label: "Variants", text: "That said, Having said that, With that in mind"}
-          ]
+          expression: "That being said",
+          context: "___ we must acknowledge environmental concerns"
         },
         {
           sentence: "<span class='expression'>From my perspective,</span> the disadvantages <span class='verb'>are</span> more significant.",
-          breakdown: [
-            {label: "Expression", text: "<span class='expression'>From my perspective,</span>"},
-            {label: "Usage", text: "Expressing personal opinion in conclusion"},
-            {label: "Variants", text: "In my view, From my point of view, In my opinion, I believe that"},
-            {label: "Level", text: "B2-C1"},
-            {label: "Note", text: "Use in conclusion after presenting both sides"}
-          ]
+          expression: "From my perspective",
+          context: "___ the disadvantages are more significant"
         }
       ]
     };
 
+    // LEARNING MODE VARIABLES
     let currentLevel = 'advantages';
     let currentIndex = 0;
     let viewedCards = new Set();
     let isFlipped = false;
 
+    // PRACTICE MODE VARIABLES
+    let practiceMode = false;
+    let practiceType = 'fillblank';
+    let practiceData = [];
+    let currentPracticeIndex = 0;
+    let practiceScore = { correct: 0, total: 0 };
+    let userAnswer = [];
+
+    // LEARNING MODE FUNCTIONS
     function changeLevel(level) {
+      if (practiceMode) return;
+      
       currentLevel = level;
       currentIndex = 0;
       viewedCards.clear();
       isFlipped = false;
       
-      document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.level-btn').forEach(btn => {
+        if (btn.id !== 'btnPractice') btn.classList.remove('active');
+      });
       document.getElementById('btn' + level.charAt(0).toUpperCase() + level.slice(1)).classList.add('active');
       
       updateCard();
@@ -1033,20 +1130,15 @@
       
       document.getElementById('sentenceText').innerHTML = cardData.sentence;
       
+      // Create breakdown content (keeping original structure)
       let breakdownHTML = '<div class="card-main-text">' + cardData.sentence + '</div>';
       breakdownHTML += '<div class="breakdown-box">';
-      
-      cardData.breakdown.forEach((item, index) => {
-        breakdownHTML += '<div class="breakdown-item">';
-        breakdownHTML += '<span class="item-label">' + item.label + '</span>';
-        breakdownHTML += '<div class="item-text">' + item.text + '</div>';
-        breakdownHTML += '</div>';
-        if (index < cardData.breakdown.length - 1) {
-          breakdownHTML += '<div class="divider">↓</div>';
-        }
-      });
-      
+      breakdownHTML += '<div class="breakdown-item">';
+      breakdownHTML += '<span class="item-label">Key Expression</span>';
+      breakdownHTML += '<div class="item-text">' + cardData.expression + '</div>';
       breakdownHTML += '</div>';
+      breakdownHTML += '</div>';
+      
       document.getElementById('breakdownContent').innerHTML = breakdownHTML;
       
       const categoryNames = {
@@ -1145,7 +1237,555 @@
       updateProgress();
     }
 
+    // PRACTICE MODE FUNCTIONS
+    function togglePracticeMode() {
+      practiceMode = !practiceMode;
+      
+      const learningMode = document.getElementById('learningMode');
+      const practiceContainer = document.getElementById('practiceMode');
+      const btnPractice = document.getElementById('btnPractice');
+      
+      if (practiceMode) {
+        learningMode.style.display = 'none';
+        practiceContainer.classList.add('active');
+        btnPractice.classList.add('practice-active');
+        
+        document.querySelectorAll('.level-btn').forEach(btn => {
+          if (btn.id !== 'btnPractice') btn.classList.remove('active');
+        });
+        
+        initPractice();
+      } else {
+        learningMode.style.display = 'block';
+        practiceContainer.classList.remove('active');
+        btnPractice.classList.remove('practice-active');
+        
+        document.getElementById('btn' + currentLevel.charAt(0).toUpperCase() + currentLevel.slice(1)).classList.add('active');
+      }
+    }
+
+    function changePracticeType(type) {
+      practiceType = type;
+      
+      document.querySelectorAll('.practice-type-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('btn' + type.charAt(0).toUpperCase() + type.slice(1)).classList.add('active');
+      
+      initPractice();
+    }
+
+    function initPractice() {
+      // Gather all expressions from all categories
+      practiceData = [];
+      Object.keys(data).forEach(category => {
+        data[category].forEach(item => {
+          practiceData.push({
+            ...item,
+            category: category
+          });
+        });
+      });
+      
+      // Shuffle and take 10 items
+      practiceData = shuffleArray(practiceData).slice(0, 10);
+      currentPracticeIndex = 0;
+      practiceScore = { correct: 0, total: 0 };
+      
+      updatePracticeScore();
+      showPracticeQuestion();
+    }
+
+    function showPracticeQuestion() {
+      if (currentPracticeIndex >= practiceData.length) {
+        showPracticeComplete();
+        return;
+      }
+      
+      const item = practiceData[currentPracticeIndex];
+      const card = document.getElementById('practiceCard');
+      
+      switch (practiceType) {
+        case 'fillblank':
+          showFillBlankQuestion(item, card);
+          break;
+        case 'reorder':
+          showReorderQuestion(item, card);
+          break;
+        case 'multiple':
+          showMultipleChoiceQuestion(item, card);
+          break;
+        case 'matching':
+          showMatchingQuestion(item, card);
+          break;
+      }
+    }
+
+    function showFillBlankQuestion(item, card) {
+      const blankContext = item.context.replace('___', '<span class="blank" id="userBlank"></span>');
+      
+      // Get one word hint from the expression
+      const words = item.expression.toLowerCase().split(' ').filter(w => w.length > 2);
+      const hintWord = words[Math.floor(Math.random() * words.length)] || item.expression.split(' ')[0];
+      
+      card.innerHTML = `
+        <div class="card-label">FILL IN THE BLANK</div>
+        <div class="practice-question">${blankContext}</div>
+        <input type="text" class="practice-input" id="practiceInput" placeholder="Type the missing expression..." />
+        <div style="display: flex; gap: 1rem;">
+          <button class="check-btn" onclick="checkFillBlank()">✓ Check Answer</button>
+          <button class="show-answer-btn" onclick="showAnswer()">💡 Show Answer</button>
+        </div>
+        <div class="feedback" id="feedback"></div>
+        <div style="margin-top: 1rem; color: #8e8e93; font-size: 0.9rem;">
+          💡 Hint: One word from the expression is "<strong style="color: #C9A961;">${hintWord}</strong>"
+        </div>
+      `;
+      
+      document.getElementById('practiceInput').focus();
+      document.getElementById('practiceInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') checkFillBlank();
+      });
+    }
+
+    function checkFillBlank() {
+      const userInput = document.getElementById('practiceInput').value.trim().toLowerCase();
+      const correctAnswer = practiceData[currentPracticeIndex].expression.toLowerCase();
+      const feedback = document.getElementById('feedback');
+      
+      practiceScore.total++;
+      
+      if (userInput === correctAnswer || correctAnswer.includes(userInput) && userInput.length > 3) {
+        practiceScore.correct++;
+        feedback.className = 'feedback correct';
+        feedback.innerHTML = `
+          ✓ Correct! The answer is: <strong>${practiceData[currentPracticeIndex].expression}</strong>
+          <div style="margin-top: 1rem;">
+            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
+          </div>
+        `;
+      } else {
+        feedback.className = 'feedback incorrect';
+        feedback.innerHTML = `
+          ✗ Not quite. The correct answer is: <strong>${practiceData[currentPracticeIndex].expression}</strong>
+          <div style="margin-top: 1rem;">
+            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
+          </div>
+        `;
+      }
+      
+      document.getElementById('practiceInput').disabled = true;
+      document.querySelector('.check-btn').disabled = true;
+      updatePracticeScore();
+    }
+
+    function showReorderQuestion(item, card) {
+      const words = item.sentence
+        .replace(/<[^>]*>/g, '') // Remove HTML tags
+        .split(' ')
+        .filter(w => w.length > 0);
+      
+      const shuffledWords = shuffleArray([...words]);
+      userAnswer = [];
+      
+      card.innerHTML = `
+        <div class="card-label">REORDER THE WORDS</div>
+        <div class="practice-question">Arrange the words to form the correct sentence:</div>
+        <div class="sentence-builder" id="sentenceBuilder">
+          <span style="color: #636366;">Click words below to build the sentence...</span>
+        </div>
+        <div class="word-bank" id="wordBank"></div>
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+          <button class="check-btn" onclick="checkReorder()" id="checkReorderBtn" disabled>✓ Check Answer</button>
+          <button class="show-answer-btn" onclick="showAnswer()">💡 Show Answer</button>
+          <button class="reset-btn" onclick="clearSentence()" style="padding: 1rem 2rem;">🔄 Clear</button>
+        </div>
+        <div class="feedback" id="feedback"></div>
+      `;
+      
+      const wordBank = document.getElementById('wordBank');
+      shuffledWords.forEach((word, index) => {
+        const chip = document.createElement('div');
+        chip.className = 'word-chip';
+        chip.textContent = word;
+        chip.onclick = () => addWordToSentence(word, index);
+        chip.dataset.index = index;
+        wordBank.appendChild(chip);
+      });
+    }
+
+    function addWordToSentence(word, index) {
+      userAnswer.push({ word, index });
+      
+      const builder = document.getElementById('sentenceBuilder');
+      if (userAnswer.length === 1) {
+        builder.innerHTML = '';
+        builder.classList.add('has-words');
+      }
+      
+      const chip = document.createElement('div');
+      chip.className = 'word-chip selected';
+      chip.textContent = word;
+      chip.onclick = () => removeWordFromSentence(userAnswer.length - 1);
+      builder.appendChild(chip);
+      
+      document.querySelector(`[data-index="${index}"]`).classList.add('used');
+      document.getElementById('checkReorderBtn').disabled = false;
+    }
+
+    function removeWordFromSentence(position) {
+      const removed = userAnswer.splice(position, 1)[0];
+      document.querySelector(`[data-index="${removed.index}"]`).classList.remove('used');
+      
+      const builder = document.getElementById('sentenceBuilder');
+      builder.innerHTML = '';
+      
+      if (userAnswer.length === 0) {
+        builder.innerHTML = '<span style="color: #636366;">Click words below to build the sentence...</span>';
+        builder.classList.remove('has-words');
+        document.getElementById('checkReorderBtn').disabled = true;
+      } else {
+        userAnswer.forEach((item, idx) => {
+          const chip = document.createElement('div');
+          chip.className = 'word-chip selected';
+          chip.textContent = item.word;
+          chip.onclick = () => removeWordFromSentence(idx);
+          builder.appendChild(chip);
+        });
+      }
+    }
+
+    function clearSentence() {
+      userAnswer = [];
+      const builder = document.getElementById('sentenceBuilder');
+      builder.innerHTML = '<span style="color: #636366;">Click words below to build the sentence...</span>';
+      builder.classList.remove('has-words');
+      
+      document.querySelectorAll('.word-chip').forEach(chip => chip.classList.remove('used'));
+      document.getElementById('checkReorderBtn').disabled = true;
+    }
+
+    function checkReorder() {
+      const userSentence = userAnswer.map(item => item.word).join(' ');
+      const correctSentence = practiceData[currentPracticeIndex].sentence.replace(/<[^>]*>/g, '').trim();
+      const feedback = document.getElementById('feedback');
+      
+      practiceScore.total++;
+      
+      if (userSentence === correctSentence) {
+        practiceScore.correct++;
+        feedback.className = 'feedback correct';
+        feedback.innerHTML = `
+          ✓ Perfect! You've arranged the words correctly!
+          <div style="margin-top: 1rem;">
+            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
+          </div>
+        `;
+      } else {
+        feedback.className = 'feedback incorrect';
+        feedback.innerHTML = `
+          ✗ Not quite. The correct order is:<br><strong>${correctSentence}</strong>
+          <div style="margin-top: 1rem;">
+            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
+          </div>
+        `;
+      }
+      
+      document.querySelectorAll('.word-chip').forEach(chip => chip.style.pointerEvents = 'none');
+      document.getElementById('checkReorderBtn').disabled = true;
+      updatePracticeScore();
+    }
+
+    function showMultipleChoiceQuestion(item, card) {
+      const correctAnswer = item.expression;
+      
+      // Get wrong answers from other items
+      const allExpressions = practiceData
+        .filter(i => i.expression !== correctAnswer)
+        .map(i => i.expression);
+      
+      const wrongAnswers = shuffleArray(allExpressions).slice(0, 3);
+      const options = shuffleArray([correctAnswer, ...wrongAnswers]);
+      
+      const blankContext = item.context.replace('___', '<span style="color: #4a90e2; font-weight: 700;">[ ? ]</span>');
+      
+      card.innerHTML = `
+        <div class="card-label">MULTIPLE CHOICE</div>
+        <div class="practice-question">${blankContext}</div>
+        <div class="practice-options" id="practiceOptions"></div>
+        <div class="feedback" id="feedback"></div>
+      `;
+      
+      const optionsContainer = document.getElementById('practiceOptions');
+      options.forEach((option, index) => {
+        const btn = document.createElement('div');
+        btn.className = 'practice-option';
+        btn.textContent = option;
+        btn.onclick = () => checkMultipleChoice(option, correctAnswer, btn);
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function checkMultipleChoice(selected, correct, button) {
+      practiceScore.total++;
+      const feedback = document.getElementById('feedback');
+      
+      document.querySelectorAll('.practice-option').forEach(opt => {
+        opt.classList.add('disabled');
+        if (opt.textContent === correct) {
+          opt.classList.add('correct');
+        }
+      });
+      
+      if (selected === correct) {
+        practiceScore.correct++;
+        button.classList.add('correct');
+        feedback.className = 'feedback correct';
+        feedback.innerHTML = `
+          ✓ Correct! "${correct}" is the right expression!
+          <div style="margin-top: 1rem;">
+            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
+          </div>
+        `;
+      } else {
+        button.classList.add('incorrect');
+        feedback.className = 'feedback incorrect';
+        feedback.innerHTML = `
+          ✗ Not quite. The correct answer is: <strong>${correct}</strong>
+          <div style="margin-top: 1rem;">
+            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
+          </div>
+        `;
+      }
+      
+      updatePracticeScore();
+    }
+
+    function showMatchingQuestion(item, card) {
+      // Get 4 random items including current
+      const items = shuffleArray([item, ...shuffleArray(practiceData.filter(i => i !== item)).slice(0, 3)]);
+      const expressions = shuffleArray(items.map(i => i.expression));
+      const contexts = items.map(i => i.context);
+      
+      userAnswer = [];
+      
+      card.innerHTML = `
+        <div class="card-label">MATCH EXPRESSIONS TO CONTEXTS</div>
+        <div class="practice-question">Match each expression with its correct context:</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; width: 100%; max-width: 700px; margin: 2rem 0;">
+          <div>
+            <div style="color: #C9A961; font-weight: 700; margin-bottom: 1rem; text-align: center;">EXPRESSIONS</div>
+            <div id="expressionList"></div>
+          </div>
+          <div>
+            <div style="color: #4a90e2; font-weight: 700; margin-bottom: 1rem; text-align: center;">CONTEXTS</div>
+            <div id="contextList"></div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+          <button class="check-btn" onclick="checkMatching()" id="checkMatchBtn" disabled>✓ Check Answers</button>
+          <button class="show-answer-btn" onclick="showAnswer()">💡 Show Answer</button>
+        </div>
+        <div class="feedback" id="feedback"></div>
+      `;
+      
+      const expressionList = document.getElementById('expressionList');
+      const contextList = document.getElementById('contextList');
+      
+      expressions.forEach((expr, index) => {
+        const btn = document.createElement('div');
+        btn.className = 'practice-option';
+        btn.textContent = expr;
+        btn.dataset.index = index;
+        btn.onclick = () => selectExpression(index);
+        expressionList.appendChild(btn);
+      });
+      
+      contexts.forEach((ctx, index) => {
+        const btn = document.createElement('div');
+        btn.className = 'practice-option';
+        btn.textContent = ctx.replace('___', '[ ? ]');
+        btn.dataset.index = index;
+        btn.onclick = () => selectContext(index);
+        contextList.appendChild(btn);
+      });
+      
+      // Store correct answers for checking
+      card.dataset.correctMatches = JSON.stringify(items.map(i => ({
+        expression: i.expression,
+        context: i.context
+      })));
+    }
+
+    let selectedExpression = null;
+    let selectedContext = null;
+
+    function selectExpression(index) {
+      document.querySelectorAll('#expressionList .practice-option').forEach(opt => opt.style.borderColor = 'rgba(74, 144, 226, 0.2)');
+      document.querySelectorAll('#expressionList .practice-option')[index].style.borderColor = '#C9A961';
+      selectedExpression = index;
+      
+      if (selectedContext !== null) {
+        createMatch();
+      }
+    }
+
+    function selectContext(index) {
+      document.querySelectorAll('#contextList .practice-option').forEach(opt => opt.style.borderColor = 'rgba(74, 144, 226, 0.2)');
+      document.querySelectorAll('#contextList .practice-option')[index].style.borderColor = '#4a90e2';
+      selectedContext = index;
+      
+      if (selectedExpression !== null) {
+        createMatch();
+      }
+    }
+
+    function createMatch() {
+      const exprText = document.querySelectorAll('#expressionList .practice-option')[selectedExpression].textContent;
+      const ctxText = document.querySelectorAll('#contextList .practice-option')[selectedContext].textContent;
+      
+      userAnswer.push({ expression: exprText, context: ctxText.replace('[ ? ]', '___') });
+      
+      document.querySelectorAll('#expressionList .practice-option')[selectedExpression].classList.add('disabled');
+      document.querySelectorAll('#contextList .practice-option')[selectedContext].classList.add('disabled');
+      
+      selectedExpression = null;
+      selectedContext = null;
+      
+      document.querySelectorAll('.practice-option').forEach(opt => opt.style.borderColor = 'rgba(74, 144, 226, 0.2)');
+      
+      if (userAnswer.length === 4) {
+        document.getElementById('checkMatchBtn').disabled = false;
+      }
+    }
+
+    function checkMatching() {
+      const card = document.getElementById('practiceCard');
+      const correctMatches = JSON.parse(card.dataset.correctMatches);
+      const feedback = document.getElementById('feedback');
+      
+      let correctCount = 0;
+      userAnswer.forEach(answer => {
+        const isCorrect = correctMatches.some(match => 
+          match.expression === answer.expression && match.context === answer.context
+        );
+        if (isCorrect) correctCount++;
+      });
+      
+      practiceScore.total++;
+      
+      if (correctCount === 4) {
+        practiceScore.correct++;
+        feedback.className = 'feedback correct';
+        feedback.innerHTML = `
+          ✓ Perfect! All matches are correct!
+          <div style="margin-top: 1rem;">
+            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
+          </div>
+        `;
+      } else {
+        feedback.className = 'feedback incorrect';
+        feedback.innerHTML = `
+          ✗ You got ${correctCount}/4 matches correct. Review the correct matches above.
+          <div style="margin-top: 1rem;">
+            <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
+          </div>
+        `;
+      }
+      
+      updatePracticeScore();
+    }
+
+    function showAnswer() {
+      const item = practiceData[currentPracticeIndex];
+      const feedback = document.getElementById('feedback');
+      
+      feedback.className = 'feedback';
+      feedback.style.display = 'block';
+      feedback.style.background = 'rgba(201, 169, 97, 0.15)';
+      feedback.style.borderColor = 'rgba(201, 169, 97, 0.5)';
+      feedback.style.color = '#C9A961';
+      feedback.innerHTML = `
+        💡 The correct answer is: <strong>${item.expression}</strong><br>
+        Full sentence: ${item.sentence.replace(/<[^>]*>/g, '')}
+        <div style="margin-top: 1rem;">
+          <button class="next-practice-btn" onclick="nextPractice()">Next Question →</button>
+        </div>
+      `;
+      
+      // Disable interaction
+      document.querySelectorAll('input, button:not(.next-practice-btn), .practice-option, .word-chip').forEach(el => {
+        el.disabled = true;
+        el.style.pointerEvents = 'none';
+      });
+    }
+
+    function nextPractice() {
+      currentPracticeIndex++;
+      showPracticeQuestion();
+    }
+
+    function showPracticeComplete() {
+      const card = document.getElementById('practiceCard');
+      const accuracy = practiceScore.total > 0 ? Math.round((practiceScore.correct / practiceScore.total) * 100) : 0;
+      
+      let message = '';
+      let emoji = '';
+      if (accuracy >= 90) {
+        message = 'Outstanding! You\'ve mastered these expressions!';
+        emoji = '🏆';
+      } else if (accuracy >= 70) {
+        message = 'Great job! Keep practicing to perfect your skills!';
+        emoji = '🌟';
+      } else if (accuracy >= 50) {
+        message = 'Good effort! Review the expressions and try again!';
+        emoji = '💪';
+      } else {
+        message = 'Keep learning! Practice makes perfect!';
+        emoji = '📚';
+      }
+      
+      card.innerHTML = `
+        <div class="card-icon">${emoji}</div>
+        <div style="font-size: 2rem; color: #C9A961; font-weight: 700; margin-bottom: 1rem;">
+          Practice Complete!
+        </div>
+        <div style="font-size: 1.25rem; color: #e5e5e7; margin-bottom: 2rem;">
+          ${message}
+        </div>
+        <div style="font-size: 3rem; color: #4a90e2; font-weight: 700; margin-bottom: 0.5rem;">
+          ${accuracy}%
+        </div>
+        <div style="font-size: 1rem; color: #8e8e93; margin-bottom: 3rem;">
+          ${practiceScore.correct} out of ${practiceScore.total} correct
+        </div>
+        <button class="reset-btn" onclick="initPractice()" style="font-size: 1.1rem; padding: 1.25rem 3rem;">
+          🎯 Try Another Practice Set
+        </button>
+      `;
+    }
+
+    function resetPractice() {
+      initPractice();
+    }
+
+    function updatePracticeScore() {
+      const accuracy = practiceScore.total > 0 ? Math.round((practiceScore.correct / practiceScore.total) * 100) : 0;
+      document.getElementById('practiceScore').textContent = 
+        `Score: ${practiceScore.correct}/${practiceScore.total} | Accuracy: ${accuracy}%`;
+    }
+
+    function shuffleArray(array) {
+      const newArray = [...array];
+      for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+      }
+      return newArray;
+    }
+
+    // KEYBOARD SHORTCUTS
     document.addEventListener('keydown', (e) => {
+      if (practiceMode) return;
+      
       if (e.key === 'ArrowLeft') prevCard();
       if (e.key === 'ArrowRight') nextCard();
       if (e.key === ' ') {
@@ -1154,9 +1794,10 @@
       }
     });
 
+    // INITIALIZE
     updateCard();
     renderDots();
     updateProgress();
   </script>
 </body>
-</html> 
+</html>
