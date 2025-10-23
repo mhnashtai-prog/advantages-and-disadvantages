@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>INTUITY: Essay Expressions Master</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      background: #0a0a0a;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .background {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at 30% 20%, rgba(201, 169, 97, 0.08) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 80%, rgba(74, 144, 226, 0.06) 0%, transparent 45%),
+                  #0a0a0a;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: #C9A961;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+    }
+    
+    .subtitle {
+      font-size: 0.875rem;
+      color: #C9A961;
+      margin-bottom: 0.25rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .author {
+      font-size: 0.75rem;
+      color: #8e8e93;
+      margin-bottom: 0.25rem;
+      font-weight: 400;
+    }
+
+    .topic {
+      font-size: 0.8125rem;
+      color: #C9A961;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .level-selector {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .level-btn {
+      padding: 0.75rem 1.5rem;
+      background: rgba(28, 28, 30, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(201, 169, 97, 0.25);
+      border-radius: 0.75rem;
+      color: #8e8e93;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .level-btn:hover {
+      background: rgba(28, 28, 30, 0.95);
+      color: #C9A961;
+      border-color: rgba(201, 169, 97, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .level-btn.active {
+      background: rgba(201, 169, 97, 0.15);
+      color: #C9A961;
+      border-color: rgba(201, 169, 97, 0.5);
+      box-shadow: 0 0 20px rgba(201, 169, 97, 0.3);
+    }
+    
+    .progress-section {
+      background: rgba(28, 28, 30, 0.85);
+      backdrop-filter: blur(40px) saturate(150%);
+      -webkit-backdrop-filter: blur(40px) saturate(150%);
+      padding: 1rem 1.5rem;
+      border-radius: 1rem;
+      border: 1.5px solid rgba(201, 169, 97, 0.25);
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+    
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      font-size: 0.8rem;
+      color: #8e8e93;
+      font-weight: 600;
+    }
+    
+    .progress-bar-container {
+      height: 8px;
+      background: rgba(201, 169, 97, 0.15);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #C9A961 0%, #4a90e2 100%);
+      border-radius: 4px;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 12px rgba(201, 169, 97, 0.5);
+      width: 0%;
+    }
+    
+    .card-container {
+      perspective: 1500px;
+      margin-bottom: 2rem;
+    }
+    
+    .card {
+      width: 100%;
+      min-height: 500px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+    
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+    
+    .card-face {
+      width: 100%;
+      min-height: 500px;
+      position: absolute;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      background: rgba(28, 28, 30, 0.98);
+      backdrop-filter: blur(40px) saturate(150%);
+      -webkit-backdrop-filter: blur(40px) saturate(150%);
+      border: 1.5px solid rgba(201, 169, 97, 0.25);
+      border-radius: 1.5rem;
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    }
+    
+    .card-front {
+      z-index: 2;
+    }
+    
+    .card-back {
+      transform: rotateY(180deg);
+      background: rgba(28, 28, 30, 1);
+      z-index: 3;
+    }
+    
+    .card-label {
+      font-size: 0.75rem;
+      color: #636366;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    
+    .card-main-text {
+      font-size: 1.5rem;
+      line-height: 1.6;
+      color: #e5e5e7;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      max-width: 700px;
+    }
+
+    .expression {
+      color: #C9A961;
+      font-weight: 700;
+      background: rgba(201, 169, 97, 0.1);
+      padding: 0.1rem 0.3rem;
+      border-radius: 0.25rem;
+    }
+
+    .subject {
+      color: #4a90e2;
+      font-weight: 600;
+    }
+
+    .verb {
+      color: #b94e48;
+      font-weight: 600;
+    }
+
+    .context {
+      color: #8e8e93;
+      font-style: italic;
+    }
+    
+    .card-back .card-main-text {
+      font-size: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .breakdown-box {
+      background: rgba(201, 169, 97, 0.08);
+      border: 1px solid rgba(201, 169, 97, 0.3);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      text-align: left;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .breakdown-item {
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .item-label {
+      color: #C9A961;
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+      display: block;
+    }
+
+    .item-text {
+      color: #e5e5e7;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .divider {
+      text-align: center;
+      font-size: 1.5rem;
+      color: #636366;
+      margin: 0.5rem 0;
+    }
+    
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.9;
+    }
+    
+    .card-hint {
+      font-size: 0.875rem;
+      color: #8e8e93;
+      margin-top: 2rem;
+      padding: 0.75rem 1.5rem;
+      background: rgba(201, 169, 97, 0.08);
+      border-radius: 0.75rem;
+      border: 1px solid rgba(201, 169, 97, 0.2);
+    }
+    
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    
+    .arrows {
+      display: flex;
+      gap: 3rem;
+      align-items: center;
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .arrow {
+      width: 3.5rem;
+      height: 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(28, 28, 30, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(201, 169, 97, 0.25);
+      border-radius: 0.75rem;
+      font-size: 1.5rem;
+      color: #8e8e93;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+    
+    .arrow:hover {
+      background: rgba(28, 28, 30, 0.95);
+      color: #C9A961;
+      border-color: rgba(201, 169, 97, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201, 169, 97, 0.2);
+    }
+    
+    .nav-dots {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 100%;
+    }
+    
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(201, 169, 97, 0.2);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(201, 169, 97, 0.3);
+    }
+    
+    .dot:hover {
+      transform: scale(1.4);
+      background: rgba(201, 169, 97, 0.4);
+    }
+    
+    .dot.active {
+      background: #C9A961;
+      box-shadow: 0 0 12px rgba(201, 169, 97, 0.6);
+      transform: scale(1.3);
+    }
+    
+    .dot.viewed {
+      background: rgba(74, 144, 226, 0.5);
+    }
+    
+    .reset-btn {
+      padding: 1rem 2.5rem;
+      background: #C9A961;
+      color: #0a0a0a;
+      border: none;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 16px rgba(201, 169, 97, 0.3);
+    }
+    
+    .reset-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(201, 169, 97, 0.4);
+      background: #d4b56f;
+    }
+    
+    .category-badge {
+      display: inline-block;
+      padding: 0.375rem 1rem;
+      background: rgba(201, 169, 97, 0.15);
+      border: 1px solid rgba(201, 169, 97, 0.3);
+      border-radius: 1.5rem;
+      font-size: 0.7rem;
+      color: #C9A961;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .legend {
+      background: rgba(28, 28, 30, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(201, 169, 97, 0.25);
+      border-radius: 1rem;
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      font-size: 0.8rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    .color-expression { background: #C9A961; }
+    .color-subject { background: #4a90e2; }
+    .color-verb { background: #b94e48; }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+      
+      header h1 {
+        font-size: 2rem;
+      }
+      
+      .card-face {
+        min-height: 450px;
+        padding: 2rem 1.5rem;
+      }
+      
+      .card-main-text {
+        font-size: 1.25rem;
+      }
+      
+      .breakdown-box {
+        padding: 1rem;
+      }
+      
+      .arrows {
+        gap: 2rem;
+      }
+      
+      .arrow {
+        width: 3rem;
+        height: 3rem;
+      }
+
+      .level-selector {
+        gap: 0.5rem;
+      }
+
+      .level-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+      }
+
+      .legend {
+        font-size: 0.7rem;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+  
+  <div class="container">
+    <header>
+      <h1>INTUITY</h1>
+      <p class="subtitle">Intuitive & Immersive Learning</p>
+      <p class="author">Majid Nashtai</p>
+      <p class="topic">Advantages & Disadvantages Essays</p>
+    </header>
+
+    <div class="level-selector">
+      <button class="level-btn active" onclick="changeLevel('advantages')" id="btnAdvantages">Introducing Advantages</button>
+      <button class="level-btn" onclick="changeLevel('disadvantages')" id="btnDisadvantages">Introducing Disadvantages</button>
+      <button class="level-btn" onclick="changeLevel('arguments')" id="btnArguments">Arguments & Criticism</button>
+      <button class="level-btn" onclick="changeLevel('balancing')" id="btnBalancing">Balancing & Concluding</button>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color color-expression"></div>
+        <span>Key Expression</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color color-subject"></div>
+        <span>Subject/Topic</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color color-verb"></div>
+        <span>Verb</span>
+      </div>
+    </div>
+    
+    <div class="progress-section">
+      <div class="progress-header">
+        <span>Progress</span>
+        <span id="progressText">0/0 viewed</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </div>
+    
+    <div class="card-container">
+      <div class="card" id="card" onclick="flipCard()">
+        <div class="card-face card-front">
+          <div class="card-label">ESSAY EXPRESSION</div>
+          <div class="category-badge" id="categoryFront"></div>
+          <div class="card-icon" id="iconFront">✍️</div>
+          <div class="card-main-text" id="sentenceText"></div>
+          <div class="card-hint">💡 Click card to see structure breakdown</div>
+        </div>
+        <div class="card-face card-back">
+          <div class="card-label">STRUCTURE & USAGE</div>
+          <div class="category-badge" id="categoryBack"></div>
+          <div class="card-icon" id="iconBack">🔍</div>
+          <div id="breakdownContent"></div>
+          <div class="card-hint">💡 Click to see example again</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="controls">
+      <div class="arrows">
+        <div class="arrow" onclick="prevCard(); event.stopPropagation();">←</div>
+        <div class="arrow" onclick="nextCard(); event.stopPropagation();">→</div>
+      </div>
+      <div class="nav-dots" id="navDots"></div>
+      <button class="reset-btn" onclick="resetProgress()">↻ Reset Progress</button>
+    </div>
+  </div>
+
+  <script>
+    const data = {
+      advantages: [
+        {
+          sentence: "<span class='expression'>One of the key advantages of</span> <span class='subject'>remote work</span> <span class='verb'>is</span> increased flexibility.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>One of the key advantages of X is...</span>"},
+            {label: "Usage", text: "Introducing the first or most important advantage"},
+            {label: "Variants", text: "One of the main benefits of... / A key advantage of... / The primary benefit of..."},
+            {label: "Level", text: "B2 - Academic formal"},
+            {label: "Follow-up", text: "Explain WHY this is an advantage with specific examples"}
+          ]
+        },
+        {
+          sentence: "<span class='subject'>Online learning</span> <span class='expression'>enables</span> students to study at their own pace.",
+          breakdown: [
+            {label: "Verb", text: "<span class='verb'>Enables</span> (allows/permits/makes possible)"},
+            {label: "Pattern", text: "Subject + enables + object + to + verb"},
+            {label: "Synonyms", text: "Allows, permits, makes it possible for, empowers"},
+            {label: "Usage", text: "Shows how something gives ability or opportunity"},
+            {label: "Example", text: "Technology enables us to communicate instantly across the world"}
+          ]
+        },
+        {
+          sentence: "<span class='subject'>Social media</span> <span class='expression'>encourages</span> people to stay connected with friends and family.",
+          breakdown: [
+            {label: "Verb", text: "<span class='verb'>Encourages</span> (promotes/facilitates)"},
+            {label: "Pattern", text: "Subject + encourages/promotes + object + to + verb"},
+            {label: "Similar verbs", text: "Promotes, facilitates, fosters, stimulates, inspires"},
+            {label: "Tone", text: "Positive - suggests something beneficial is happening"},
+            {label: "Context", text: "Use when describing positive influences or outcomes"}
+          ]
+        },
+        {
+          sentence: "<span class='subject'>Electric vehicles</span> <span class='expression'>make it easier to</span> reduce carbon emissions.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>Make(s) it easier to...</span>"},
+            {label: "Pattern", text: "Subject + makes it easier to + verb"},
+            {label: "Variants", text: "Makes it possible to... / Makes it simpler to... / Facilitates..."},
+            {label: "Usage", text: "Shows how something simplifies or improves a process"},
+            {label: "Opposite", text: "Makes it harder to... / Makes it difficult to..."}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>The main argument in favour of</span> <span class='subject'>renewable energy</span> is environmental sustainability.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>The main argument in favour of X is...</span>"},
+            {label: "Level", text: "C1 - Very formal/academic"},
+            {label: "Usage", text: "Presenting the strongest supporting argument"},
+            {label: "Structure", text: "Can also write: The main argument for X is..."},
+            {label: "Follow-up", text: "Provide evidence and examples to support this argument"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>One positive aspect of</span> <span class='subject'>urbanization</span> <span class='verb'>is</span> improved access to services.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>One positive aspect of X is...</span>"},
+            {label: "Variants", text: "A positive aspect of... / One benefit of... / A favorable feature of..."},
+            {label: "Usage", text: "More neutral than 'advantage' - good for balanced essays"},
+            {label: "Opposite", text: "One negative aspect of... / One drawback of..."},
+            {label: "Level", text: "B2-C1"}
+          ]
+        },
+        {
+          sentence: "<span class='subject'>Public transportation</span> <span class='expression'>helps</span> reduce traffic congestion in cities.",
+          breakdown: [
+            {label: "Verb", text: "<span class='verb'>Helps</span> (assists/aids in)"},
+            {label: "Pattern", text: "Subject + helps (to) + verb / helps + object + verb"},
+            {label: "Usage", text: "'Helps' is slightly less formal than 'facilitates' or 'enables'"},
+            {label: "Note", text: "'To' is optional: helps reduce = helps to reduce"},
+            {label: "Context", text: "Showing how something contributes to a positive outcome"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>A major benefit of</span> <span class='subject'>bilingualism</span> is enhanced cognitive flexibility.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>A major benefit of X is...</span>"},
+            {label: "Synonyms", text: "A significant advantage / A key strength / An important plus"},
+            {label: "Usage", text: "Highlighting an important positive point"},
+            {label: "Level", text: "B2+ - Academic"},
+            {label: "Structure", text: "Can list multiple: A major benefit is... Another benefit is..."}
+          ]
+        },
+        {
+          sentence: "<span class='subject'>Automation</span> <span class='expression'>permits</span> companies to increase productivity significantly.",
+          breakdown: [
+            {label: "Verb", text: "<span class='verb'>Permits</span> (allows/enables - formal)"},
+            {label: "Pattern", text: "Subject + permits + object + to + verb"},
+            {label: "Formality", text: "More formal than 'allows', less common than 'enables'"},
+            {label: "Usage", text: "Academic and business contexts"},
+            {label: "Synonyms", text: "Allows, enables, makes it possible for"}
+          ]
+        },
+        {
+          sentence: "<span class='subject'>Flexible working hours</span> <span class='expression'>let</span> employees balance work and personal life more effectively.",
+          breakdown: [
+            {label: "Verb", text: "<span class='verb'>Let</span> (allow - informal)"},
+            {label: "Pattern", text: "Subject + lets + object + bare infinitive (no 'to')"},
+            {label: "Note", text: "'Lets' is less formal - better for general essays, not academic"},
+            {label: "Formal alternative", text: "Allow, enable, permit"},
+            {label: "Example", text: "Technology lets us work from anywhere"}
+          ]
+        }
+      ],
+      
+      disadvantages: [
+        {
+          sentence: "<span class='expression'>One of the disadvantages of</span> <span class='subject'>social media</span> <span class='verb'>is</span> the spread of misinformation.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>One of the disadvantages of X is...</span>"},
+            {label: "Usage", text: "Introducing a key negative point"},
+            {label: "Variants", text: "One drawback of... / A disadvantage of... / One problem with..."},
+            {label: "Level", text: "B2 - Academic formal"},
+            {label: "Structure", text: "Follow with explanation and examples"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>One of the arguments against</span> <span class='subject'>nuclear energy</span> is the issue of radioactive waste.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>One of the arguments against X is...</span>"},
+            {label: "Level", text: "C1 - Formal academic"},
+            {label: "Usage", text: "Presenting opposing viewpoints"},
+            {label: "Variants", text: "The main argument against... / A key objection to... / Critics argue that..."},
+            {label: "Context", text: "Balanced, objective essay tone"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>One of the problems is</span> <span class='subject'>the high cost of implementation</span>.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>One of the problems is...</span>"},
+            {label: "Usage", text: "Identifying specific difficulties or challenges"},
+            {label: "Variants", text: "A major problem is... / The main issue is... / One challenge is..."},
+            {label: "Note", text: "More direct than 'disadvantage' - suggests something needs fixing"},
+            {label: "Level", text: "B2"}
+          ]
+        },
+        {
+          sentence: "<span class='subject'>Excessive screen time</span> <span class='expression'>can lead to</span> various health problems.",
+          breakdown: [
+            {label: "Expression", text: "<span class='verb'>Can lead to...</span> (result in/cause)"},
+            {label: "Pattern", text: "Subject + can lead to + noun/noun phrase"},
+            {label: "Usage", text: "Showing negative consequences or outcomes"},
+            {label: "Synonyms", text: "Results in, causes, brings about, gives rise to"},
+            {label: "Level", text: "B2 - Very common in essays"}
+          ]
+        },
+        {
+          sentence: "<span class='subject'>Strict regulations</span> <span class='expression'>prevent</span> companies from innovating quickly.",
+          breakdown: [
+            {label: "Verb", text: "<span class='verb'>Prevent</span> (stop/hinder/block)"},
+            {label: "Pattern", text: "Subject + prevents + object + from + verb-ing"},
+            {label: "Usage", text: "Showing how something stops or blocks progress"},
+            {label: "Similar verbs", text: "Hinders, discourages, restricts, limits, impedes"},
+            {label: "Opposite", text: "Enables, encourages, facilitates, promotes"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>One criticism about</span> <span class='subject'>standardized testing</span> is that it doesn't measure creativity.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>One criticism about X is...</span>"},
+            {label: "Level", text: "C1 - Academic"},
+            {label: "Usage", text: "Presenting critical viewpoints"},
+            {label: "Variants", text: "A common criticism... / Critics argue that... / One critique is..."},
+            {label: "Tone", text: "More analytical than 'problem' or 'disadvantage'"}
+          ]
+        },
+        {
+          sentence: "<span class='subject'>Fast fashion</span> <span class='expression'>results in</span> massive environmental pollution.",
+          breakdown: [
+            {label: "Verb", text: "<span class='verb'>Results in</span> (causes/leads to)"},
+            {label: "Pattern", text: "Subject + results in + noun/noun phrase"},
+            {label: "Usage", text: "Showing direct negative consequences"},
+            {label: "Synonyms", text: "Leads to, causes, brings about, produces"},
+            {label: "Level", text: "B2+ - Academic"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>One negative aspect of</span> <span class='subject'>artificial intelligence</span> is potential job displacement.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>One negative aspect of X is...</span>"},
+            {label: "Usage", text: "More neutral than 'problem' - good for balanced tone"},
+            {label: "Opposite", text: "One positive aspect of... / One benefit of..."},
+            {label: "Variants", text: "A negative feature... / An adverse aspect... / A concerning element..."},
+            {label: "Level", text: "B2-C1"}
+          ]
+        },
+        {
+          sentence: "<span class='subject'>Bureaucracy</span> <span class='expression'>discourages</span> people from starting their own businesses.",
+          breakdown: [
+            {label: "Verb", text: "<span class='verb'>Discourages</span> (demotivates/deters)"},
+            {label: "Pattern", text: "Subject + discourages + object + from + verb-ing"},
+            {label: "Usage", text: "Shows how something reduces motivation or willingness"},
+            {label: "Opposite", text: "Encourages, motivates, inspires, promotes"},
+            {label: "Similar", text: "Deters, dissuades, puts off, demotivates"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>A drawback of</span> <span class='subject'>working from home</span> is social isolation.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>A drawback of X is...</span>"},
+            {label: "Level", text: "B2-C1 - Formal"},
+            {label: "Usage", text: "Academic essays - more formal than 'downside'"},
+            {label: "Variants", text: "One drawback is... / The main drawback... / A significant drawback..."},
+            {label: "Opposite", text: "A benefit of... / An advantage of..."}
+          ]
+        },
+        {
+          sentence: "<span class='subject'>Traffic congestion</span> <span class='expression'>hinders</span> economic development in major cities.",
+          breakdown: [
+            {label: "Verb", text: "<span class='verb'>Hinders</span> (impedes/obstructs - formal)"},
+            {label: "Pattern", text: "Subject + hinders + noun"},
+            {label: "Usage", text: "Shows how something blocks or slows progress"},
+            {label: "Level", text: "C1 - Academic formal"},
+            {label: "Synonyms", text: "Impedes, obstructs, hampers, restricts, constrains"}
+          ]
+        }
+      ],
+      
+      arguments: [
+        {
+          sentence: "<span class='expression'>The main argument in favour of</span> <span class='subject'>capital punishment</span> is deterrence.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>The main argument in favour of X is...</span>"},
+            {label: "Level", text: "C1 - Very formal/academic"},
+            {label: "Usage", text: "Presenting the strongest supporting argument"},
+            {label: "American spelling", text: "In favor of (US) / In favour of (UK)"},
+            {label: "Opposite", text: "The main argument against..."}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>Proponents argue that</span> <span class='subject'>genetic engineering</span> <span class='verb'>could solve</span> world hunger.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>Proponents argue that...</span>"},
+            {label: "Usage", text: "Introducing what supporters believe"},
+            {label: "Level", text: "C1 - Academic"},
+            {label: "Opposite", text: "Opponents/Critics argue that..."},
+            {label: "Variants", text: "Advocates suggest... / Supporters claim... / Proponents believe..."}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>Critics claim that</span> <span class='subject'>standardized tests</span> <span class='verb'>fail to</span> measure true intelligence.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>Critics claim that...</span>"},
+            {label: "Usage", text: "Presenting opposing viewpoints or criticism"},
+            {label: "Variants", text: "Critics argue/maintain/contend/assert that..."},
+            {label: "Level", text: "C1 - Academic"},
+            {label: "Opposite", text: "Supporters/Proponents claim that..."}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>One criticism about</span> <span class='subject'>consumerism</span> is its environmental impact.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>One criticism about/of X is...</span>"},
+            {label: "Usage", text: "Introducing critical perspectives"},
+            {label: "Variants", text: "A common criticism... / A major critique... / One objection..."},
+            {label: "Level", text: "C1"},
+            {label: "Follow-up", text: "Explain the criticism with evidence"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>It is often argued that</span> <span class='subject'>technology</span> <span class='verb'>makes</span> people less social.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>It is often argued that...</span>"},
+            {label: "Usage", text: "Presenting common viewpoints neutrally"},
+            {label: "Variants", text: "It is commonly believed... / Many argue... / Some claim..."},
+            {label: "Level", text: "B2-C1"},
+            {label: "Tone", text: "Neutral - doesn't show if you agree or disagree"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>Opponents contend that</span> <span class='subject'>free trade</span> <span class='verb'>harms</span> domestic industries.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>Opponents contend that...</span>"},
+            {label: "Verb", text: "Contend = argue/claim (formal)"},
+            {label: "Level", text: "C1-C2 - Very formal"},
+            {label: "Variants", text: "Opponents maintain/assert/argue that..."},
+            {label: "Opposite", text: "Proponents/Supporters contend that..."}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>There is an ongoing debate about</span> whether <span class='subject'>AI</span> will benefit or harm humanity.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>There is an ongoing debate about...</span>"},
+            {label: "Usage", text: "Introducing controversial topics"},
+            {label: "Variants", text: "There is debate over... / X is hotly debated / X remains controversial"},
+            {label: "Level", text: "C1"},
+            {label: "Structure", text: "Can follow with 'whether' or 'about/over + noun'"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>A common objection to</span> <span class='subject'>wind farms</span> is their visual impact on landscapes.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>A common objection to X is...</span>"},
+            {label: "Usage", text: "Presenting frequent criticisms"},
+            {label: "Variants", text: "A frequent objection... / One objection... / Critics object that..."},
+            {label: "Level", text: "C1 - Academic"},
+            {label: "Tone", text: "Formal, analytical"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>Advocates maintain that</span> <span class='subject'>veganism</span> <span class='verb'>is</span> the most ethical diet.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>Advocates maintain that...</span>"},
+            {label: "Verb", text: "Maintain = argue/claim (formal, suggests ongoing belief)"},
+            {label: "Usage", text: "Presenting what supporters strongly believe"},
+            {label: "Level", text: "C1"},
+            {label: "Synonyms", text: "Advocates argue/contend/assert/claim that..."}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>Skeptics question whether</span> <span class='subject'>renewable energy</span> can truly replace fossil fuels.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>Skeptics question whether...</span>"},
+            {label: "Usage", text: "Introducing doubts or uncertainties"},
+            {label: "Variants", text: "Critics doubt that... / Some question whether... / There are doubts about..."},
+            {label: "Level", text: "C1"},
+            {label: "Tone", text: "Shows uncertainty or criticism"}
+          ]
+        }
+      ],
+      
+      balancing: [
+        {
+          sentence: "<span class='expression'>On the one hand,</span> <span class='subject'>social media</span> connects people. <span class='expression'>On the other hand,</span> it can be addictive.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>On the one hand... On the other hand...</span>"},
+            {label: "Usage", text: "Presenting contrasting viewpoints (ALWAYS use both together)"},
+            {label: "Level", text: "B2 - Very common in essays"},
+            {label: "Structure", text: "First paragraph: On the one hand... Second: On the other hand..."},
+            {label: "Note", text: "NEVER use 'on one hand' - must include 'the'"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>While</span> <span class='subject'>technology</span> improves efficiency, <span class='expression'>it also</span> threatens jobs.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>While X... it also...</span>"},
+            {label: "Usage", text: "Showing contrast in one sentence"},
+            {label: "Variants", text: "Although... / Whilst... (UK) / Even though..."},
+            {label: "Structure", text: "Concession first, then main point"},
+            {label: "Level", text: "B2"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>Despite the benefits,</span> <span class='subject'>globalization</span> <span class='verb'>has</span> significant drawbacks.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>Despite + noun/noun phrase</span>"},
+            {label: "Pattern", text: "Despite + noun, main clause"},
+            {label: "Usage", text: "Acknowledging positives before presenting negatives"},
+            {label: "Variants", text: "In spite of... / Notwithstanding... (very formal)"},
+            {label: "Note", text: "NEVER 'despite of' - it's incorrect!"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>However,</span> not all the effects of <span class='subject'>urbanization</span> are positive.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>However,</span> (transition word)"},
+            {label: "Usage", text: "Introducing contrasting point or change of direction"},
+            {label: "Punctuation", text: "However, (comma after) OR ; however, (semicolon before)"},
+            {label: "Variants", text: "Nevertheless, Nonetheless, Yet, Still"},
+            {label: "Level", text: "B2 - Essential for essays"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>Although</span> <span class='subject'>online learning</span> offers flexibility, <span class='expression'>it lacks</span> face-to-face interaction.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>Although + clause</span>"},
+            {label: "Structure", text: "Although + concession, main point"},
+            {label: "Usage", text: "Acknowledging one side before presenting the other"},
+            {label: "Variants", text: "Though, Even though, While, Whilst"},
+            {label: "Level", text: "B2"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>In conclusion,</span> <span class='expression'>the advantages outweigh the disadvantages.</span>",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>In conclusion, / To conclude,</span>"},
+            {label: "Usage", text: "Signaling final paragraph"},
+            {label: "Phrase", text: "<span class='expression'>The advantages outweigh the disadvantages</span> = positives are stronger"},
+            {label: "Variants", text: "To sum up, Overall, All things considered"},
+            {label: "Level", text: "B2"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>Weighing up both sides,</span> I believe the benefits are more significant.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>Weighing up both sides,</span>"},
+            {label: "Usage", text: "Showing you've considered all arguments before concluding"},
+            {label: "Variants", text: "Having considered both sides... / Taking everything into account..."},
+            {label: "Level", text: "C1"},
+            {label: "Tone", text: "Balanced, thoughtful conclusion"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>It is worth noting that</span> <span class='subject'>renewable energy</span> <span class='verb'>requires</span> significant initial investment.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>It is worth noting that...</span>"},
+            {label: "Usage", text: "Adding important additional information"},
+            {label: "Variants", text: "It should be noted that... / It is important to note... / Notably..."},
+            {label: "Level", text: "C1"},
+            {label: "Context", text: "Drawing attention to significant points"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>Nevertheless,</span> the long-term benefits <span class='verb'>justify</span> the costs.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>Nevertheless,</span> (formal contrast)"},
+            {label: "Meaning", text: "'Despite what was just said' - stronger than 'however'"},
+            {label: "Usage", text: "Showing contrast after acknowledging opposing point"},
+            {label: "Level", text: "C1 - Formal"},
+            {label: "Synonyms", text: "Nonetheless, Even so, That said"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>Taking everything into account,</span> the positives <span class='verb'>outweigh</span> the negatives.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>Taking everything into account,</span>"},
+            {label: "Usage", text: "Final conclusion after considering all points"},
+            {label: "Variants", text: "All things considered, On balance, Overall"},
+            {label: "Phrase", text: "X outweighs Y = X is more important/significant than Y"},
+            {label: "Level", text: "C1"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>That being said,</span> we must acknowledge the environmental concerns.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>That being said,</span>"},
+            {label: "Meaning", text: "'Despite what I just mentioned'"},
+            {label: "Usage", text: "Introducing contrasting point or limitation"},
+            {label: "Level", text: "C1 - Less formal than 'nevertheless'"},
+            {label: "Variants", text: "That said, Having said that, With that in mind"}
+          ]
+        },
+        {
+          sentence: "<span class='expression'>From my perspective,</span> the disadvantages <span class='verb'>are</span> more significant.",
+          breakdown: [
+            {label: "Expression", text: "<span class='expression'>From my perspective,</span>"},
+            {label: "Usage", text: "Expressing personal opinion in conclusion"},
+            {label: "Variants", text: "In my view, From my point of view, In my opinion, I believe that"},
+            {label: "Level", text: "B2-C1"},
+            {label: "Note", text: "Use in conclusion after presenting both sides"}
+          ]
+        }
+      ]
+    };
+
+    let currentLevel = 'advantages';
+    let currentIndex = 0;
+    let viewedCards = new Set();
+    let isFlipped = false;
+
+    function changeLevel(level) {
+      currentLevel = level;
+      currentIndex = 0;
+      viewedCards.clear();
+      isFlipped = false;
+      
+      document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('btn' + level.charAt(0).toUpperCase() + level.slice(1)).classList.add('active');
+      
+      updateCard();
+      renderDots();
+      updateProgress();
+    }
+
+    function updateCard() {
+      const cardData = data[currentLevel][currentIndex];
+      const card = document.getElementById('card');
+      
+      if (isFlipped) {
+        card.classList.remove('flipped');
+        isFlipped = false;
+        const arrows = document.querySelector('.arrows');
+        arrows.style.opacity = '1';
+        arrows.style.pointerEvents = 'auto';
+      }
+      
+      document.getElementById('sentenceText').innerHTML = cardData.sentence;
+      
+      let breakdownHTML = '<div class="card-main-text">' + cardData.sentence + '</div>';
+      breakdownHTML += '<div class="breakdown-box">';
+      
+      cardData.breakdown.forEach((item, index) => {
+        breakdownHTML += '<div class="breakdown-item">';
+        breakdownHTML += '<span class="item-label">' + item.label + '</span>';
+        breakdownHTML += '<div class="item-text">' + item.text + '</div>';
+        breakdownHTML += '</div>';
+        if (index < cardData.breakdown.length - 1) {
+          breakdownHTML += '<div class="divider">↓</div>';
+        }
+      });
+      
+      breakdownHTML += '</div>';
+      document.getElementById('breakdownContent').innerHTML = breakdownHTML;
+      
+      const categoryNames = {
+        advantages: 'Introducing Advantages',
+        disadvantages: 'Introducing Disadvantages',
+        arguments: 'Arguments & Criticism',
+        balancing: 'Balancing & Concluding'
+      };
+      const categoryText = categoryNames[currentLevel];
+      document.getElementById('categoryFront').textContent = categoryText;
+      document.getElementById('categoryBack').textContent = categoryText;
+      
+      viewedCards.add(currentLevel + '-' + currentIndex);
+      updateProgress();
+      updateDots();
+    }
+
+    function flipCard() {
+      const card = document.getElementById('card');
+      card.classList.toggle('flipped');
+      isFlipped = !isFlipped;
+      
+      const arrows = document.querySelector('.arrows');
+      if (isFlipped) {
+        arrows.style.opacity = '0';
+        arrows.style.pointerEvents = 'none';
+      } else {
+        arrows.style.opacity = '1';
+        arrows.style.pointerEvents = 'auto';
+      }
+    }
+
+    function nextCard() {
+      if (currentIndex < data[currentLevel].length - 1) {
+        currentIndex++;
+        updateCard();
+      }
+    }
+
+    function prevCard() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateCard();
+      }
+    }
+
+    function renderDots() {
+      const dotsContainer = document.getElementById('navDots');
+      dotsContainer.innerHTML = '';
+      
+      data[currentLevel].forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        dot.onclick = () => {
+          currentIndex = index;
+          updateCard();
+        };
+        dotsContainer.appendChild(dot);
+      });
+      
+      updateDots();
+    }
+
+    function updateDots() {
+      const dots = document.querySelectorAll('.dot');
+      dots.forEach((dot, index) => {
+        dot.classList.remove('active', 'viewed');
+        if (index === currentIndex) {
+          dot.classList.add('active');
+        } else if (viewedCards.has(currentLevel + '-' + index)) {
+          dot.classList.add('viewed');
+        }
+      });
+    }
+
+    function updateProgress() {
+      const total = data[currentLevel].length;
+      let viewed = 0;
+      
+      for (let i = 0; i < total; i++) {
+        if (viewedCards.has(currentLevel + '-' + i)) {
+          viewed++;
+        }
+      }
+      
+      const percentage = (viewed / total) * 100;
+      document.getElementById('progressBar').style.width = percentage + '%';
+      document.getElementById('progressText').textContent = viewed + '/' + total + ' viewed';
+    }
+
+    function resetProgress() {
+      viewedCards.clear();
+      currentIndex = 0;
+      isFlipped = false;
+      updateCard();
+      updateProgress();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') prevCard();
+      if (e.key === 'ArrowRight') nextCard();
+      if (e.key === ' ') {
+        e.preventDefault();
+        flipCard();
+      }
+    });
+
+    updateCard();
+    renderDots();
+    updateProgress();
+  </script>
+</body>
+</html> 
